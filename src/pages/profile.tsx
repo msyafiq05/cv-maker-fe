@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import logo from '../assets/logo.png'; // Pastikan folder 'assets' bukan 'assests'
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -21,21 +22,23 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-white font-sans text-gray-800 flex flex-col">
+      
       {/* NAVBAR */}
       <nav className="bg-sky-400 px-8 py-4 flex items-center justify-between shadow-md sticky top-0 z-50">
-        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-          <div className="w-10 h-10 border-2 border-white rounded-lg flex items-center justify-center text-white font-bold text-xl italic">
-            CV
+        <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
+          {/* LOGO ASLI - NAVBAR */}
+          <div className="w-12 h-12 flex items-center justify-center overflow-hidden">
+            <img src={logo} alt="Logo" className="w-full h-full object-contain brightness-0 invert" />
           </div>
           <span className="text-2xl font-bold text-white tracking-tight uppercase">CV MAKER</span>
         </div>
+        
         <div className="flex items-center gap-8 font-semibold text-slate-800">
           <Link to="/" className="hover:text-white transition text-sm">Home</Link>
           <Link to="#" className="hover:text-white transition text-sm">About us</Link>
           <Link to="/templates" className="hover:text-white transition text-sm">Template</Link>
           <Link to="/project" className="hover:text-white transition text-sm">Project</Link>
           
-          {/* PROFILE CLICK AREA (ACTIVE STATE) */}
           <div 
             onClick={() => navigate('/profile')} 
             className="flex items-center gap-2 cursor-pointer group ml-4"
@@ -153,8 +156,11 @@ const Profile = () => {
       <footer className="bg-sky-400 text-white pt-24 pb-12 mt-20">
         <div className="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
           <div className="lg:col-span-1">
-            <div className="flex items-center gap-2 mb-6 cursor-pointer" onClick={() => navigate('/')}>
-              <div className="w-8 h-8 border-2 border-white rounded-lg flex items-center justify-center font-extrabold italic">CV</div>
+            <div className="flex items-center gap-3 mb-6 cursor-pointer" onClick={() => navigate('/')}>
+              {/* LOGO ASLI - FOOTER */}
+              <div className="w-10 h-10 flex items-center justify-center">
+                <img src={logo} alt="Logo" className="w-full h-full object-contain brightness-0 invert" />
+              </div>
               <span className="text-xl font-extrabold italic text-white tracking-tighter">CV MAKER</span>
             </div>
             <p className="text-sm opacity-90 leading-relaxed font-bold italic max-w-xs">
