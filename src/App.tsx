@@ -4,6 +4,7 @@ import Login from './pages/login';
 import Templates from './pages/templates';
 import Project from './pages/project';
 import EditCV from './pages/editcv';
+import Profile from './pages/profile';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/templates" element={<Templates />} />
         <Route path="/project" element={<Project />} />
         <Route path="/edit" element={<EditCV />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
   );

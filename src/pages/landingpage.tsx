@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const LandingPage = () => {
-  // Setup untuk testing: false = Guest view (tombol Login), true = User view (tombol Project)
-  const [isLoggedIn] = useState(false);
+  // Setup untuk testing: false = Guest view (tombol Login), true = User view (muncul Foto Profil)
+  const [isLoggedIn] = useState(true);
   const navigate = useNavigate();
 
   return (
@@ -12,9 +12,11 @@ const LandingPage = () => {
       {/* NAVBAR */}
       <nav className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-slate-100 z-50">
         <div className="max-w-7xl mx-auto px-8 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            {/* Logo placeholder, taruh file logo.png disini */}
-            <img src="/logo.png" alt="CV Maker Logo" className="w-10 h-10 object-contain" />
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
+            {/* Logo placeholder, taruh file logo.png di folder public */}
+            <div className="w-10 h-10 bg-sky-400 rounded-lg flex items-center justify-center text-white font-bold text-xl italic shadow-sm">
+              CV
+            </div>
             <span className="text-2xl font-extrabold text-slate-800 tracking-tight">CV MAKER</span>
           </div>
           
@@ -24,9 +26,13 @@ const LandingPage = () => {
             <Link to="/templates" className="hover:text-sky-500 transition">Template</Link>
             
             {isLoggedIn ? (
-              <div className="flex items-center gap-3 cursor-pointer group">
-                <div className="w-10 h-10 bg-slate-200 rounded-full border-2 border-slate-300 overflow-hidden group-hover:border-sky-400 transition">
-                  {/* Placeholder Foto Profil User */}
+              <div 
+                onClick={() => navigate('/profile')} 
+                className="flex items-center gap-3 cursor-pointer group hover:opacity-80 transition"
+              >
+                <div className="w-10 h-10 bg-slate-200 rounded-full border-2 border-slate-300 overflow-hidden group-hover:border-sky-400 transition shadow-sm">
+                  {/* Foto Profil User */}
+                  <img src="https://via.placeholder.com/150" alt="Profile" className="w-full h-full object-cover" />
                 </div>
                 <svg className="w-5 h-5 text-slate-600 group-hover:text-sky-500 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
@@ -47,11 +53,11 @@ const LandingPage = () => {
       {/* HERO SECTION */}
       <header className="max-w-7xl mx-auto px-8 pt-24 pb-20 flex flex-col lg:flex-row items-center justify-between gap-16">
         <div className="lg:w-1/2">
-          <h1 className="text-7xl font-extrabold text-sky-400 leading-tight tracking-tight mb-5">
+          <h1 className="text-7xl font-extrabold text-sky-400 leading-tight tracking-tight mb-5 uppercase">
             CREATE NEW CV <br />
             <span className="text-slate-800">Simple and Effective</span>
           </h1>
-          <p className="text-xl text-slate-500 mb-12 max-w-lg leading-relaxed">
+          <p className="text-xl text-slate-500 mb-12 max-w-lg leading-relaxed font-medium">
             Build your professional resume in minutes with our easy-to-use templates
           </p>
           
@@ -77,8 +83,10 @@ const LandingPage = () => {
         
         <div className="lg:w-1/2 relative">
           <div className="w-full aspect-[4/3] bg-white rounded-3xl border border-slate-100 shadow-sm flex items-center justify-center p-6">
-            {/* Placeholder untuk Gambar Ilustrasi Hero, taruh file hero.png disini */}
-            <img src="/hero.png" alt="Resume Builder Illustration" className="w-full h-full object-contain" />
+            {/* Placeholder Gambar Ilustrasi Hero */}
+            <div className="w-full h-full bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 flex items-center justify-center text-slate-400 font-bold">
+               [ Illustration Image ]
+            </div>
           </div>
         </div>
       </header>
@@ -88,14 +96,15 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto px-8 flex flex-col lg:flex-row items-center gap-20">
           <div className="lg:w-2/5 relative">
             <div className="w-full aspect-square bg-white rounded-3xl border border-slate-100 shadow-sm flex items-center justify-center p-6">
-              {/* Placeholder untuk Gambar Ilustrasi About, taruh file about.png disini */}
-              <img src="/about.png" alt="Login Illustration" className="w-full h-full object-contain" />
+               <div className="w-full h-full bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 flex items-center justify-center text-slate-400 font-bold">
+                  [ About Illustration ]
+               </div>
             </div>
           </div>
           
           <div className="lg:w-3/5">
             <h2 className="text-6xl font-bold text-sky-400 mb-10 tracking-tight">About us</h2>
-            <div className="space-y-6 text-lg leading-relaxed text-slate-600 font-medium max-w-3xl">
+            <div className="space-y-6 text-lg leading-relaxed text-slate-600 font-medium max-w-3xl text-justify">
               <p>
                 Our website is a user-friendly CV maker platform designed to help individuals create professional and visually appealing resumes efficiently. It offers a variety of customizable templates suitable for different industries and career levels, allowing users to personalize their CV according to their needs.
               </p>
@@ -107,13 +116,34 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* TEMPLATE SECTION PREVIEW */}
+      <section className="py-24 bg-slate-50 border-t border-slate-100">
+        <div className="max-w-7xl mx-auto px-8">
+            <h2 className="text-center text-5xl font-bold text-sky-400 mb-16 tracking-widest uppercase">
+                Templates
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8">
+                {[1, 2, 3, 4, 5].map((item) => (
+                    <div 
+                        key={item} 
+                        onClick={() => navigate('/templates')}
+                        className="bg-white p-3 rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-2 transition duration-300 cursor-pointer"
+                    >
+                        <div className="w-full h-64 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 font-bold uppercase text-xs">
+                            [ Template {item} ]
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+      </section>
+
       {/* FOOTER */}
       <footer className="bg-sky-400 text-white pt-24 pb-12">
         <div className="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
           <div className="lg:col-span-1">
             <div className="flex items-center gap-2 mb-6">
-              {/* Logo placeholder, taruh file logo_footer.png (versi putih) disini */}
-              <img src="/logo_footer.png" alt="CV Maker Logo" className="w-8 h-8 object-contain" />
+              <div className="w-8 h-8 border-2 border-white rounded-lg flex items-center justify-center font-extrabold italic">CV</div>
               <span className="text-xl font-extrabold italic text-white tracking-tighter">CV MAKER</span>
             </div>
             <p className="text-sm opacity-90 leading-relaxed font-bold italic max-w-xs">
@@ -121,11 +151,10 @@ const LandingPage = () => {
             </p>
           </div>
           
-          {/* Footer Menus */}
           <div>
             <h4 className="font-extrabold mb-6 text-lg tracking-tight">Product</h4>
             <ul className="space-y-4 text-sm font-semibold opacity-90">
-              <li><Link to="#" className="hover:text-white transition">CV Templates</Link></li>
+              <li><Link to="/templates" className="hover:text-white transition">CV Templates</Link></li>
               <li><Link to="#" className="hover:text-white transition">Preview</Link></li>
             </ul>
           </div>
@@ -152,21 +181,13 @@ const LandingPage = () => {
           </div>
         </div>
         
-        {/* Footer Bottom */}
-        <div className="max-w-7xl mx-auto px-8 border-t border-white/20 pt-10 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+        <div className="max-w-7xl mx-auto px-8 border-t border-white/20 pt-10 flex flex-col md:flex-row items-center justify-between gap-6">
           <p className="text-xs font-semibold opacity-80">© 2026 CV Maker. All Rights Reserved</p>
           
-          {/* Social Icons - Taruh file icon_ig.png, icon_in.png, icon_x.png di folder public */}
-          <div className="flex items-center gap-4">
-            <Link to="#" className="p-2 border border-white/30 rounded-full hover:bg-white/10 transition">
-              <img src="/icon_ig.png" alt="Instagram" className="w-5 h-5 object-contain" />
-            </Link>
-            <Link to="#" className="p-2 border border-white/30 rounded-full hover:bg-white/10 transition">
-              <img src="/icon_in.png" alt="LinkedIn" className="w-5 h-5 object-contain" />
-            </Link>
-            <Link to="#" className="p-2 border border-white/30 rounded-full hover:bg-white/10 transition">
-              <img src="/icon_x.png" alt="X" className="w-5 h-5 object-contain" />
-            </Link>
+          <div className="flex items-center gap-4 text-xs font-bold uppercase">
+            <Link to="#" className="p-2 border border-white/30 rounded-full hover:bg-white/10 transition">IG</Link>
+            <Link to="#" className="p-2 border border-white/30 rounded-full hover:bg-white/10 transition">IN</Link>
+            <Link to="#" className="p-2 border border-white/30 rounded-full hover:bg-white/10 transition">X</Link>
           </div>
         </div>
       </footer>
