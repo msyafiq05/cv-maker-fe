@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
+import logoCV from '../assets/logo.png'; // Pastikan path ini benar
 
 const Templates = () => {
   const navigate = useNavigate();
@@ -16,9 +17,12 @@ const Templates = () => {
       {/* NAVBAR */}
       <nav className="bg-sky-400 px-8 py-4 flex items-center justify-between shadow-md sticky top-0 z-50">
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-          <div className="w-10 h-10 border-2 border-white rounded-lg flex items-center justify-center text-white font-bold text-xl italic">
-            CV
+          
+          {/* DIV TETAP SAMA, HANYA ISI TEKS "CV" DIGANTI IMG */}
+          <div className="w-10 h-10 border-2 border-white rounded-lg flex items-center justify-center text-white font-bold text-xl italic overflow-hidden">
+            <img src={logoCV} alt="Logo" className="w-full h-full object-cover" />
           </div>
+
           <span className="text-2xl font-bold text-white tracking-tight">CV MAKER</span>
         </div>
         <div className="flex items-center gap-8 font-semibold text-slate-800">
@@ -27,7 +31,6 @@ const Templates = () => {
           <Link to="/templates" className="hover:text-white transition text-sm underline underline-offset-4">Template</Link>
           <Link to="/project" className="hover:text-white transition text-sm">Project</Link>
           
-          {/* PROFILE CLICK AREA */}
           <div 
             onClick={() => navigate('/profile')} 
             className="flex items-center gap-2 cursor-pointer group ml-4"
@@ -84,7 +87,12 @@ const Templates = () => {
         <div className="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
           <div className="lg:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 border-2 border-white rounded-lg flex items-center justify-center font-bold italic">CV</div>
+              
+              {/* FOOTER JUGA SAMA, HANYA GANTI TEKS JADI IMG */}
+              <div className="w-8 h-8 border-2 border-white rounded-lg flex items-center justify-center font-bold italic overflow-hidden">
+                <img src={logoCV} alt="Logo" className="w-full h-full object-cover" />
+              </div>
+
               <span className="text-xl font-bold italic tracking-tighter">CV MAKER</span>
             </div>
             <p className="text-sm opacity-90 leading-relaxed italic max-w-xs font-bold">
