@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import logoCV from '../assets/logo.png'; // Pastikan path ini benar
 
 const EditCV = () => {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ const EditCV = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [showDownloadModal, setShowDownloadModal] = useState(false);
 
+  // FIX: Menambahkan tipe data TypeScript agar tidak error merah
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -30,7 +32,10 @@ const EditCV = () => {
       {/* NAVBAR */}
       <nav className="bg-sky-400 px-8 py-4 flex items-center justify-between shadow-sm z-10 sticky top-0">
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-          <div className="w-10 h-10 border-2 border-white rounded-lg flex items-center justify-center text-white font-bold text-xl italic">CV</div>
+          {/* Menampilkan logoCV di dalam kotak putih */}
+          <div className="w-10 h-10 border-2 border-white rounded-lg flex items-center justify-center overflow-hidden">
+            <img src={logoCV} alt="Logo" className="w-full h-full object-cover" />
+          </div>
           <span className="text-2xl font-bold text-white tracking-tight uppercase">CV MAKER</span>
         </div>
         <div className="flex items-center gap-8 font-semibold text-slate-800">
@@ -39,7 +44,6 @@ const EditCV = () => {
           <Link to="/templates" className="hover:text-white transition text-sm">Template</Link>
           <Link to="/project" className="hover:text-white transition text-sm">Project</Link>
           
-          {/* PROFILE CLICK AREA FIX */}
           <div 
             onClick={() => navigate('/profile')} 
             className="flex items-center gap-2 cursor-pointer group ml-4"
@@ -59,10 +63,12 @@ const EditCV = () => {
       </nav>
 
       {/* MAIN CONTENT */}
-      <main className="grow max-w-350 w-full mx-auto p-8 flex gap-8">
+      <main className="grow max-w-[1400px] w-full mx-auto p-8 flex gap-8">
         {/* LEFT PANE - Form Area */}
         <div className="w-1/2 flex flex-col justify-between">
           <div className="bg-white rounded-2xl shadow-sm p-8 border border-gray-100 grow">
+            
+            {/* STEP 1: Personal Profile */}
             {currentStep === 1 && (
               <div className="space-y-4">
                 <h2 className="text-3xl font-bold text-gray-900 mb-6">Complete Your Profile</h2>
@@ -86,10 +92,15 @@ const EditCV = () => {
                 </div>
               </div>
             )}
+
+            {/* FIX: Mengganti spinner loading agar konten muncul di Step 2-5 */}
             {currentStep > 1 && (
-              <div className="flex flex-col items-center justify-center h-full text-slate-400 gap-4 uppercase font-bold tracking-widest">
-                <div className="w-20 h-20 border-4 border-dashed border-slate-200 rounded-full animate-spin"></div>
-                Step {currentStep} Content Loading...
+              <div className="space-y-6">
+                <h2 className="text-3xl font-bold text-gray-900 mb-6">Step {currentStep}</h2>
+                <div className="p-10 border-2 border-dashed border-slate-200 rounded-2xl flex flex-col items-center justify-center text-center">
+                   <p className="text-slate-500 font-medium">Konten untuk langkah ini akan segera hadir!</p>
+                   <p className="text-xs text-slate-400 mt-2">Gunakan tombol di bawah untuk navigasi.</p>
+                </div>
               </div>
             )}
           </div>
@@ -97,10 +108,10 @@ const EditCV = () => {
           {/* Action Buttons */}
           <div className="flex justify-between items-center mt-6">
             <button onClick={handlePrevStep} className="px-10 py-3 bg-white border-2 border-slate-800 font-bold rounded-xl hover:bg-slate-50 transition">
-              CANCEL
+              {currentStep === 1 ? 'CANCEL' : 'PREVIOUS'}
             </button>
             <button onClick={handleNextStep} className="px-10 py-3 bg-sky-400 text-white font-bold rounded-xl shadow-lg shadow-sky-100 hover:bg-sky-500 transition">
-              SAVE & CONTINUE
+              {currentStep === 5 ? 'FINISH' : 'SAVE & CONTINUE'}
             </button>
           </div>
         </div>
@@ -118,7 +129,7 @@ const EditCV = () => {
           </div>
 
           {/* KERTAS CV PREVIEW */}
-          <div className="grow bg-white rounded-xl shadow-2xl border border-gray-100 p-16 min-h-150 origin-top scale-[0.98]">
+          <div className="grow bg-white rounded-xl shadow-2xl border border-gray-100 p-16 min-h-[600px] origin-top scale-[0.98]">
             <div className="max-w-full">
               <h1 className="text-5xl font-extrabold text-gray-800 uppercase tracking-tighter mb-2">
                 {formData.fullName || "YOUR FULL NAME"}
@@ -132,7 +143,7 @@ const EditCV = () => {
               <div className="mt-10">
                 <h3 className="font-black text-gray-800 text-xl border-b-2 border-gray-100 mb-4 uppercase tracking-widest">Profile</h3>
                 <p className="text-md text-gray-600 font-medium leading-relaxed">
-                  {formData.description || "The description you type on the left will appear here automatically..."}
+                  {formData.description || "Deskripsi yang Anda ketik akan muncul di sini secara otomatis..."}
                 </p>
               </div>
 
@@ -155,7 +166,7 @@ const EditCV = () => {
       {/* FOOTER */}
       <footer className="bg-white border-t border-slate-100 py-6 mt-auto">
         <div className="max-w-7xl mx-auto px-8 flex justify-between items-center text-xs font-bold text-slate-400 uppercase tracking-widest">
-           <p>© 2026 CV Maker. All Right Reserved</p>
+           <p>© 2026 CV Maker. All Rights Reserved</p>
            <div className="flex gap-6">
               <span className="cursor-pointer hover:text-sky-400 transition">Instagram</span>
               <span className="cursor-pointer hover:text-sky-400 transition">Linkedin</span>
@@ -167,7 +178,7 @@ const EditCV = () => {
       {showDownloadModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center">
           <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-md" onClick={() => setShowDownloadModal(false)}></div>
-          <div className="relative bg-white rounded-3xl p-12 w-125 shadow-2xl flex flex-col gap-8">
+          <div className="relative bg-white rounded-3xl p-12 w-[500px] shadow-2xl flex flex-col gap-8">
             <h2 className="text-4xl font-black text-slate-800 text-center uppercase tracking-tighter">Download CV</h2>
             <div className="space-y-2">
               <label className="font-bold text-slate-500 text-xs uppercase tracking-widest ml-1">File Name</label>
