@@ -1,136 +1,102 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-// IMPORT LOGO SECARA RESMI DISINI
-import logo from '../assets/logo.png';
+// src/pages/landingpage.tsx
+
+import { useNavigate } from 'react-router-dom';
 
 const LandingPage = () => {
-  const [isLoggedIn] = useState(true);
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
   const navigate = useNavigate();
 
-  return (
-    <div className="min-h-screen bg-white font-sans text-gray-800">
-      
-      {/* NAVBAR BIRU */}
-      <nav className="sticky top-0 bg-sky-400 px-8 py-4 flex items-center justify-between shadow-md z-50">
-        <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
-          
-          {/* LOGO AREA */}
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
-            <div className="w-10 h-10 flex items-center justify-center">
-              {/* PANGGIL VARIABEL logo YANG SUDAH DIIMPORT */}
-              <img 
-                src={logo} 
-                alt="Logo CV Maker" 
-                className="w-full h-full object-contain brightness-0 invert" 
-              />
-            </div>
-            <span className="text-2xl font-extrabold text-white tracking-tight uppercase">CV MAKER</span>
-          </div>
-          
-          <div className="flex items-center gap-10 font-bold text-white text-sm">
-            <Link to="/" className="hover:text-sky-100 transition">Home</Link>
-            <Link to="#" className="hover:text-sky-100 transition">About us</Link>
-            <Link to="/templates" className="hover:text-sky-100 transition">Template</Link>
-            <Link to="/project" className="hover:text-sky-100 transition font-black">Project</Link>
-            
-            {isLoggedIn && (
-              <div onClick={() => navigate('/profile')} className="flex items-center gap-3 cursor-pointer group transition">
-                <div className="w-10 h-10 bg-white rounded-full border-2 border-sky-300 overflow-hidden group-hover:border-white transition shadow-sm">
-                  <img src="https://via.placeholder.com/150" alt="Profile" className="w-full h-full object-cover" />
-                </div>
-                <svg className="w-5 h-5 text-white group-hover:translate-y-0.5 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
-              </div>
-            )}
-          </div>
-        </div>
-      </nav>
+  const previewTemplates = [
+    { id: 1, name: 'Professional Blue', img: 'https://via.placeholder.com/400x600' },
+    { id: 2, name: 'Minimalist Pink', img: 'https://via.placeholder.com/400x600' },
+    { id: 3, name: 'Modern Gold', img: 'https://via.placeholder.com/400x600' },
+    { id: 4, name: 'Clean Blue', img: 'https://via.placeholder.com/400x600' },
+    { id: 5, name: 'Elegant Mono', img: 'https://via.placeholder.com/400x600' },
+  ];
 
-      {/* HERO SECTION */}
-      <header className="max-w-7xl mx-auto px-8 pt-24 pb-20 flex flex-col lg:flex-row items-center justify-between gap-16">
-        <div className="lg:w-1/2 text-center lg:text-left">
-          <h1 className="text-7xl font-black text-sky-400 leading-tight tracking-tighter mb-6 uppercase italic">
+  return (
+    <>
+      <header className="max-w-7xl mx-auto px-8 pt-24 pb-20 flex flex-col lg:flex-row items-center justify-between gap-16 text-center lg:text-left bg-white">
+        <div className="lg:w-1/2">
+          <h1 className="text-7xl font-bold text-sky-400 leading-tight tracking-tight mb-4">
             CREATE NEW CV <br />
-            <span className="text-slate-800">Simple and Effective</span>
+            <span className="text-slate-600">Simple and Effective</span>
           </h1>
-          <p className="text-xl text-slate-500 mb-12 max-w-lg leading-relaxed font-medium mx-auto lg:mx-0">
+          <p className="text-lg text-slate-500 mb-10 max-w-lg leading-relaxed font-medium mx-auto lg:mx-0">
             Build your professional resume in minutes with our easy-to-use templates.
           </p>
-          <button 
-            onClick={() => navigate('/templates')} 
-            className="bg-sky-400 text-white px-12 py-4 rounded-2xl font-black text-xl hover:bg-sky-500 transition shadow-2xl shadow-sky-200 uppercase tracking-widest"
-          >
-            Get Started Free
-          </button>
+          
+          {isLoggedIn ? (
+             <button 
+               onClick={() => navigate('/project')} 
+               className="bg-sky-400 text-white px-10 py-3.5 rounded-xl font-bold text-lg hover:bg-sky-500 transition shadow-lg shadow-sky-200"
+             >
+               Go to Project
+             </button>
+          ) : (
+            <button 
+              onClick={() => navigate('/templates')} 
+              className="bg-sky-400 text-white px-10 py-3.5 rounded-xl font-bold text-lg hover:bg-sky-500 transition shadow-lg shadow-sky-200"
+            >
+              Get Started Free
+            </button>
+          )}
         </div>
         <div className="lg:w-1/2 relative">
-          <div className="w-full aspect-[4/3] bg-slate-50 rounded-[40px] border-4 border-dashed border-slate-100 flex items-center justify-center p-6 text-slate-300 font-black uppercase tracking-[1em]">
+          <div className="w-full aspect-[4/3] bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 flex items-center justify-center p-6 text-slate-400 font-bold uppercase tracking-widest shadow-sm">
             Hero Illustration
           </div>
         </div>
       </header>
 
-      {/* ABOUT SECTION */}
-      <section className="bg-slate-50 py-32 border-t border-slate-100">
-        <div className="max-w-7xl mx-auto px-8 flex flex-col lg:flex-row items-center gap-24">
-            <div className="lg:w-2/5 aspect-square bg-white rounded-[40px] shadow-2xl shadow-slate-200 border border-slate-100 flex items-center justify-center text-slate-300 font-black uppercase tracking-widest p-10">
-                About Image
+      <section className="bg-white py-24">
+        <div className="max-w-7xl mx-auto px-8 flex flex-col lg:flex-row items-center gap-20">
+            <div className="lg:w-2/5 aspect-[4/5] bg-slate-50 rounded-2xl shadow-md border border-slate-100 flex items-center justify-center text-slate-400 font-bold uppercase tracking-widest p-10">
+                About Illustration
             </div>
             <div className="lg:w-3/5">
-                <h2 className="text-6xl font-black text-sky-400 mb-10 tracking-tighter uppercase italic">About us</h2>
-                <div className="space-y-8 text-xl font-medium text-slate-600 leading-relaxed text-justify font-sans">
-                    <p>Our website is a user-friendly CV maker platform designed to help individuals create professional and visually appealing resumes efficiently.</p>
-                    <p>With a simple step-by-step builder, users can input their information, preview the results in real time, and download a polished CV ready for job applications.</p>
+                <h2 className="text-6xl font-bold text-sky-400 mb-8 tracking-tight">About us</h2>
+                <div className="space-y-6 text-lg font-medium text-slate-500 leading-relaxed text-justify">
+                    <p>Our website is a user-friendly CV maker platform designed to help individuals create professional and visually appealing resumes efficiently. It offers a variety of customizable templates suitable for different industries and career levels, allowing users to personalize their CV according to their needs.</p>
+                    <p>With a simple step-by-step builder, users can input their information, preview the results in real time, and download a polished CV ready for job applications. The platform is built to save time, reduce complexity, and support users in presenting their skills and experiences with confidence.</p>
                 </div>
             </div>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="bg-sky-400 text-white pt-24 pb-12 mt-auto">
-        <div className="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-16 mb-20">
-          <div className="lg:col-span-1">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-10 h-10 flex items-center justify-center">
-                <img src={logo} alt="Logo" className="w-full h-full object-contain brightness-0 invert" />
-              </div>
-              <span className="text-2xl font-black italic text-white tracking-tighter uppercase">CV MAKER</span>
+      {!isLoggedIn && (
+        <section id="template-section" className="bg-white py-16 pb-32">
+          <div className="max-w-7xl mx-auto px-8">
+            <h2 className="text-center text-5xl font-bold text-sky-400 mb-16 tracking-widest uppercase">
+              TEMPLATE
+            </h2>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+              {previewTemplates.map((item) => (
+                <div 
+                  key={item.id} 
+                  onClick={() => navigate('/templates')}
+                  className="group cursor-pointer relative"
+                >
+                  <div className="relative aspect-[3/4] overflow-hidden rounded-xl border border-slate-200 shadow-sm group-hover:shadow-xl group-hover:border-sky-300 transition-all duration-300">
+                    <img 
+                      src={item.img} 
+                      alt={item.name} 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-sky-900/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <div className="bg-white px-5 py-2 rounded-lg font-bold text-sky-500 shadow-md translate-y-2 group-hover:translate-y-0 transition-transform text-sm">
+                        Use Template
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-            <p className="text-sm opacity-90 leading-relaxed font-bold italic max-w-xs uppercase tracking-tighter">
-              Helping professionals build their careers through compelling resumes.
-            </p>
           </div>
-          <div>
-            <h4 className="font-black mb-8 text-lg tracking-widest uppercase text-white/80 font-sans">Product</h4>
-            <ul className="space-y-5 text-sm font-bold opacity-90 uppercase font-sans">
-              <li><Link to="/templates" className="hover:text-white transition">CV Templates</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-black mb-8 text-lg tracking-widest uppercase text-white/80 font-sans">Support</h4>
-            <ul className="space-y-5 text-sm font-bold opacity-90 uppercase font-sans">
-              <li><Link to="#" className="hover:text-white transition">FAQ</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-black mb-8 text-lg tracking-widest uppercase text-white/80 font-sans">Resources</h4>
-            <ul className="space-y-5 text-sm font-bold opacity-90 uppercase font-sans">
-              <li><Link to="#" className="hover:text-white transition">ATS Tips</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-black mb-8 text-lg tracking-widest uppercase text-white/80 font-sans">Legal</h4>
-            <ul className="space-y-5 text-sm font-bold opacity-90 uppercase font-sans">
-              <li><Link to="#" className="hover:text-white transition">Terms</Link></li>
-            </ul>
-          </div>
-        </div>
-        <div className="max-w-7xl mx-auto px-8 border-t border-white/20 pt-12 flex justify-between items-center text-[10px] font-black opacity-70 uppercase tracking-[0.3em] font-sans">
-          <p>© 2026 CV Maker. All Right Reserved</p>
-        </div>
-      </footer>
-    </div>
+        </section>
+      )}
+    </>
   );
 };
 
