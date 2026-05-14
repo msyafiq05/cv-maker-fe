@@ -9,7 +9,7 @@ const Login = () => {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Di sini King bisa kasih validasi sederhana
+    // Di sini kamu bisa kasih validasi sederhana
     if (email !== "" && password !== "") {
       // PROSES KRUSIAL: Simpan status login di browser
       localStorage.setItem('isLoggedIn', 'true');
@@ -20,7 +20,7 @@ const Login = () => {
       // Refresh sebentar biar Navbar-nya sadar kalau status sudah berubah
       window.location.reload();
     } else {
-      alert("King, tolong isi email dan passwordnya dulu!");
+      alert("Mohon isi email dan passwordnya dulu!");
     }
   };
 
@@ -39,7 +39,7 @@ const Login = () => {
               type="email" 
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="king@ub.ac.id" 
+              placeholder="your email" 
               className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl outline-none focus:border-sky-400 focus:bg-white transition font-medium"
             />
           </div>

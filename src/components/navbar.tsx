@@ -39,6 +39,7 @@ const Navbar = () => {
           <Link to="#" className="hover:text-sky-100 transition">About us</Link>
           <span onClick={handleTemplateClick} className="cursor-pointer hover:text-sky-100 transition">Template</span>
           <Link to="/project" className="hover:text-sky-100 transition">Project</Link>
+          <Link to="/admin" className="hover:text-sky-100 transition">Dashboard Admin</Link>
           
           {isLoggedIn ? (
             <div className="flex items-center">

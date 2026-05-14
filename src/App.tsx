@@ -19,7 +19,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
         </Route>
 
-        {/* Halaman Login asli King di sini */}
+        {/* Halaman Login asli kamu di sini */}
         <Route path="/login" element={<Login />} />
       </Routes>
     </Router>
