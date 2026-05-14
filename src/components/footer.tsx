@@ -3,7 +3,7 @@ import logo from '../assets/logo.png';
 
 const Footer = () => {
   return (
-    <footer className="bg-sky-400 pt-16 pb-8 mt-auto">
+    <footer className="bg-gradient-to-r from-[#55B3EB] to-[#BBE4FB] pt-16 pb-8 mt-auto">
       <div className="max-w-7xl mx-auto px-8 flex flex-col lg:flex-row justify-between items-start mb-8 gap-10 lg:gap-0">
         {/* Logo Section */}
         <div className="w-full lg:w-1/4">
