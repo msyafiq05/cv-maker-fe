@@ -6,6 +6,7 @@ import Templates from './pages/templates';
 import Project from './pages/project';
 import EditCV from './pages/editcv';
 import Profile from './pages/profile';
+import PrivacyPolicy from './pages/privacypolicy';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/project" element={<Project />} />
           <Route path="/edit" element={<EditCV />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         </Route>
 
         {/* Halaman Login asli kamu di sini */}

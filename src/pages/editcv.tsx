@@ -8,6 +8,22 @@ const TrashIcon = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColo
 const PlusIcon = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>;
 const ImageIcon = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-10 h-10 text-gray-400"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>;
 
+// Generic Input Component
+const InputField = ({ label, name, value, onChange, placeholder = "", type = "text" }: any) => (
+  <div className="flex flex-col gap-1.5">
+    <label className="text-[10px] font-bold text-gray-800">{label}</label>
+    <input type={type} name={name} value={value} onChange={onChange} placeholder={placeholder} 
+           className="px-4 py-3 bg-white border border-gray-300 rounded-md outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 transition text-[11px] text-gray-700 placeholder-gray-400 font-medium" />
+  </div>
+);
+
+const TextAreaField = ({ label, name, value, onChange, placeholder = "", rows = 4 }: any) => (
+  <div className="flex flex-col gap-1.5 h-full">
+    <label className="text-[10px] font-bold text-gray-800">{label}</label>
+    <textarea name={name} value={value} onChange={onChange} placeholder={placeholder} rows={rows}
+           className="px-4 py-3 bg-white border border-gray-300 rounded-md outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 transition text-[11px] text-gray-700 placeholder-gray-400 resize-none h-full font-medium" />
+  </div>
+);
 const EditCV = () => {
   const location = useLocation();
   const selectedTemplate = location.state?.templateId || 1;
@@ -71,22 +87,7 @@ const EditCV = () => {
     setShowDownloadModal(false);
   };
 
-  // Generic Input Component
-  const InputField = ({ label, name, value, onChange, placeholder = "", type = "text" }: any) => (
-    <div className="flex flex-col gap-1.5">
-      <label className="text-[10px] font-bold text-gray-800">{label}</label>
-      <input type={type} name={name} value={value} onChange={onChange} placeholder={placeholder} 
-             className="px-4 py-3 bg-white border border-gray-300 rounded-md outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 transition text-[11px] text-gray-700 placeholder-gray-400 font-medium" />
-    </div>
-  );
 
-  const TextAreaField = ({ label, name, value, onChange, placeholder = "", rows = 4 }: any) => (
-    <div className="flex flex-col gap-1.5 h-full">
-      <label className="text-[10px] font-bold text-gray-800">{label}</label>
-      <textarea name={name} value={value} onChange={onChange} placeholder={placeholder} rows={rows}
-             className="px-4 py-3 bg-white border border-gray-300 rounded-md outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 transition text-[11px] text-gray-700 placeholder-gray-400 resize-none h-full font-medium" />
-    </div>
-  );
 
   return (
     <div className="bg-[#EAF5FC] w-full grow flex flex-col relative py-8 min-h-screen">
