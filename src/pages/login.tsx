@@ -219,11 +219,11 @@ const Login = () => {
             Continue With Google
           </button>
 
-          {/* REGISTER */}
+          {/* REGISTER -> SEKARANG GARIS INI SUDAH TERARAH KE /signup */}
           <p className="text-center mt-8 text-gray-600 text-[15px]">
             Not Registered Yet?{' '}
             <span
-              onClick={() => navigate('/register')}
+              onClick={() => navigate('/signup')} // <-- BERHASIL DIUBAH KE /signup
               className="text-[#60a5fa] font-semibold cursor-pointer hover:underline"
             >
               Sign Up

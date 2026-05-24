@@ -9,6 +9,7 @@ import EditCV from './pages/editcv';
 import Profile from './pages/profile';
 import PrivacyPolicy from './pages/privacypolicy';
 import ForgotPassword from './pages/forgotpassword';
+import Signup from './pages/signup';
 
 function App() {
   return (
@@ -27,10 +28,16 @@ function App() {
         {/* Halaman Login */}
         <Route path="/login" element={<Login />} />
 
-        {/* TAMBAH INI */}
+        {/* Halaman Forgot Password */}
         <Route
           path="/forgot-password"
           element={<ForgotPassword />}
+        />
+
+        {/* Halaman Sign Up */}
+        <Route 
+          path="/signup" 
+          element={<Signup />} // <-- 2. TAMBAH ROUTE SIGNUP DI SINI
         />
 
       </Routes>
