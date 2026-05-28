@@ -1,6 +1,8 @@
 // src/pages/templates.tsx
 
 import { useNavigate } from 'react-router-dom';
+// @ts-ignore
+import BlackWhiteTemplates from '../components/templates/BlackWhiteTemplates';
 
 const Templates = () => {
   const navigate = useNavigate();
@@ -32,9 +34,17 @@ const Templates = () => {
               {/* Placeholder Gambar & Teks di Dalam Card - Mengikuti style project.tsx */}
               <div 
                 onClick={() => navigate('/edit', { state: { templateId: item.id } })} 
-                className="w-full h-[400px] bg-slate-50 flex items-center justify-center text-slate-400 font-medium p-4 text-center uppercase tracking-widest text-sm transition group-hover:bg-slate-100/50"
+                className="w-full h-[400px] bg-slate-50 flex items-center justify-center font-medium transition group-hover:bg-slate-100/50 relative overflow-hidden"
               >
-                [ {item.name} ]
+                {item.id === 2 ? (
+                  <div className="pointer-events-none absolute top-0 left-0 w-[800px] h-[1130px]" style={{ transform: 'scale(0.29)', transformOrigin: 'top left' }}>
+                    <BlackWhiteTemplates />
+                  </div>
+                ) : (
+                  <span className="text-slate-400 uppercase tracking-widest text-sm p-4 text-center">
+                    [ {item.name} ]
+                  </span>
+                )}
               </div>
               
               {/* Hover Overlay: Menampilkan tombol "Use Template" yang manis khas menu pemilihan template */}

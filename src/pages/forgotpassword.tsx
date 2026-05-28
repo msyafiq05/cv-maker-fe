@@ -35,8 +35,7 @@ const ForgotPassword = () => {
 
     setLoading(true);
     try {
-      // Panggil API Backend
-      const res = await authApi.forgotPassword(email);
+      await authApi.forgotPassword(email);
       // Backend mengembalikan reset_token (di production dikirim via email)
       setSuccess('Kode OTP / Token telah dikirim. Silakan cek email Anda.');
       setStep(2);

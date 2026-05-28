@@ -1,13 +1,24 @@
-// src/pages/landingpage.tsx
-
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import landingPageImg from '../assets/landingpage.png';
 import landingPage2Img from '../assets/landingpage2.png';
+// @ts-ignore
 import BlackWhiteTemplates from '../components/templates/BlackWhiteTemplates';
 
 const LandingPage = () => {
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.scrollToAboutUs) {
+      setTimeout(() => {
+        document.getElementById('about-us-section')?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+      // Clean state to avoid scrolling again on back navigation
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   const previewTemplates = [
     { id: 1, name: 'PROFESSIONAL BLUE', img: 'https://via.placeholder.com/400x600', isPreview: false },
@@ -54,7 +65,7 @@ const LandingPage = () => {
         </div>
       </header>
 
-      <section className="bg-white py-24">
+      <section id="about-us-section" className="bg-white py-24">
         <div className="max-w-7xl mx-auto px-8 flex flex-col lg:flex-row items-center gap-20">
             <div className="lg:w-2/5 flex justify-center items-center">
                 <img 

@@ -1,6 +1,6 @@
 // src/pages/profile.tsx
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { profileApi, getUser } from '../services/api';
 
 const COUNTRIES = [
@@ -10,6 +10,7 @@ const COUNTRIES = [
 
 const Profile = () => {
   const localUser = getUser();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [userData, setUserData] = useState({
     nama:          localUser?.nama          ?? '',
@@ -20,6 +21,7 @@ const Profile = () => {
     skills:        localUser?.skills        ?? '',
     about:         localUser?.about         ?? '',
     social_media:  localUser?.social_media  ?? '',
+    avatar:        localUser?.avatar        ?? '',
     password:      '',
     password_confirmation: '',
   });
@@ -42,6 +44,7 @@ const Profile = () => {
           skills:       u.skills        ?? '',
           about:        u.about         ?? '',
           social_media: u.social_media  ?? '',
+          avatar:       u.avatar        ?? '',
           password:     '',
           password_confirmation: '',
         });
@@ -55,6 +58,21 @@ const Profile = () => {
   ) => {
     const { name, value } = e.target;
     setUserData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        alert('Ukuran file maksimal adalah 2MB!');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        setUserData(prev => ({ ...prev, avatar: reader.result as string }));
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -78,6 +96,7 @@ const Profile = () => {
         skills:       userData.skills,
         about:        userData.about,
         social_media: userData.social_media,
+        avatar:       userData.avatar,
       };
       if (userData.password) {
         payload.password              = userData.password;
@@ -146,6 +165,37 @@ const Profile = () => {
           font-weight: 700;
           color: #3aaeea;
           flex-shrink: 0;
+          cursor: pointer;
+          position: relative;
+          overflow: hidden;
+          transition: all 0.2s;
+        }
+        .avatar-circle:hover {
+          opacity: 0.9;
+        }
+        .avatar-circle img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 50%;
+        }
+        .avatar-overlay {
+          position: absolute;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.45);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #fff;
+          font-size: 9px;
+          font-weight: 800;
+          letter-spacing: 0.5px;
+          opacity: 0;
+          transition: opacity 0.2s;
+          border-radius: 50%;
+        }
+        .avatar-circle:hover .avatar-overlay {
+          opacity: 1;
         }
         .profile-header-info h2 {
           margin: 0 0 2px;
@@ -291,7 +341,24 @@ const Profile = () => {
 
         {/* ── Profile Header ── */}
         <div className="profile-header">
-          <div className="avatar-circle">{initials}</div>
+          <div 
+            className="avatar-circle relative group"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            {userData.avatar ? (
+              <img src={userData.avatar} alt="Avatar" />
+            ) : (
+              initials
+            )}
+            <div className="avatar-overlay">UBAH</div>
+          </div>
+          <input 
+            type="file" 
+            ref={fileInputRef} 
+            onChange={handleAvatarChange} 
+            accept="image/png, image/jpeg, image/jpg" 
+            className="hidden" 
+          />
           <div className="profile-header-info">
             <h2>{userData.nama || 'Username'}</h2>
             <p>{userData.email}</p>

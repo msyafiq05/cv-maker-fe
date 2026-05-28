@@ -26,49 +26,49 @@ const Footer = () => {
             <h4 className="font-bold mb-4 text-sm">Product</h4>
             <ul className="space-y-3 text-xs font-medium">
               <li><Link to="/templates" className="hover:text-black transition">CV Templates</Link></li>
-              <li><Link to="#" className="hover:text-black transition">Preview</Link></li>
+              <li><Link to="/edit" className="hover:text-black transition">Preview</Link></li>
             </ul>
           </div>
           <div>
             <h4 className="font-bold mb-4 text-sm">Support</h4>
             <ul className="space-y-3 text-xs font-medium">
-              <li><Link to="#" className="hover:text-black transition">FAQ</Link></li>
-              <li><Link to="#" className="hover:text-black transition">Contact Us</Link></li>
+              <li><Link to="/faq" className="hover:text-black transition">FAQ</Link></li>
+              <li><Link to="/contact-us" className="hover:text-black transition">Contact Us</Link></li>
             </ul>
           </div>
           <div>
             <h4 className="font-bold mb-4 text-sm">Resources</h4>
             <ul className="space-y-3 text-xs font-medium">
-              <li><Link to="#" className="hover:text-black transition">ATS-Friendly tips</Link></li>
-              <li><Link to="#" className="hover:text-black transition">Design Guide</Link></li>
+              <li><Link to="/ats-tips" className="hover:text-black transition">ATS-Friendly tips</Link></li>
+              <li><Link to="/design-guide" className="hover:text-black transition">Design Guide</Link></li>
             </ul>
           </div>
           <div>
             <h4 className="font-bold mb-4 text-sm">Legal</h4>
             <ul className="space-y-3 text-xs font-medium">
               <li><Link to="/privacy-policy" className="hover:text-black transition">Privacy Policy</Link></li>
-              <li><Link to="#" className="hover:text-black transition">Terms Of Service</Link></li>
+              <li><Link to="/terms-of-service" className="hover:text-black transition">Terms Of Service</Link></li>
             </ul>
           </div>
         </div>
 
         {/* Social Icons Section */}
         <div className="w-full lg:w-1/4 flex lg:justify-end gap-3 mt-4 lg:mt-0 items-start">
-          <a href="#" className="w-8 h-8 rounded-full bg-gradient-to-tr from-yellow-500 via-pink-500 to-purple-600 flex items-center justify-center text-white shadow-sm hover:opacity-90 transition">
+          <a href="https://www.instagram.com/cvmaker" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-gradient-to-tr from-yellow-500 via-pink-500 to-purple-600 flex items-center justify-center text-white shadow-sm hover:opacity-90 transition">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
               <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
               <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
               <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
             </svg>
           </a>
-          <a href="#" className="w-8 h-8 rounded-full bg-[#0A66C2] flex items-center justify-center text-white shadow-sm hover:opacity-90 transition">
+          <a href="https://www.linkedin.com/company/cvmaker" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-[#0A66C2] flex items-center justify-center text-white shadow-sm hover:opacity-90 transition">
             <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="0" className="w-4 h-4">
               <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452z"/>
             </svg>
           </a>
-          <a href="#" className="w-8 h-8 rounded-full bg-black flex items-center justify-center text-white shadow-sm hover:opacity-90 transition">
+          <a href="https://www.tiktok.com/@cvmaker" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-black flex items-center justify-center text-white shadow-sm hover:opacity-90 transition">
             <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-              <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/>
+              <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.02 1.62 4.17 1.22 1.34 2.97 2.1 4.78 2.2v3.7c-1.89-.04-3.74-.75-5.18-1.99-.07 3.66.02 7.33-.06 10.99-.18 2.13-1.28 4.14-3.14 5.22-2.18 1.31-4.99 1.4-7.25.24-2.58-1.24-4.22-4.08-3.95-6.97.23-2.73 2.2-5.18 4.88-5.83V11.5c-1.46.22-2.72 1.25-3.21 2.65-.63 1.69-.17 3.73 1.13 4.93 1.28 1.24 3.25 1.53 4.82.72 1.27-.61 2.05-1.95 2.09-3.37.05-3.83.01-7.66.02-11.49-.03-.94-.03-1.89-.03-2.83-.01-.01-.01-.01-.01-.02Z"/>
             </svg>
           </a>
         </div>

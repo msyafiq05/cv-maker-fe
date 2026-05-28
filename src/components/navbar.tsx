@@ -33,6 +33,15 @@ const Navbar = () => {
     }
   };
 
+  const handleAboutUsClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (location.pathname === '/') {
+      document.getElementById('about-us-section')?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate('/', { state: { scrollToAboutUs: true } });
+    }
+  };
+
   return (
     <nav className="sticky top-0 bg-gradient-to-r from-[#55B3EB] to-[#BBE4FB] px-8 py-4 flex items-center justify-between shadow-md z-50">
       <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
@@ -45,7 +54,7 @@ const Navbar = () => {
         
         <div className="flex items-center gap-8 font-medium text-slate-800 text-sm">
           <Link to="/" className="hover:text-slate-900 transition">Home</Link>
-          <Link to="#" className="hover:text-slate-900 transition">About us</Link>
+          <span onClick={handleAboutUsClick} className="cursor-pointer hover:text-slate-900 transition">About us</span>
           <span onClick={handleTemplateClick} className="cursor-pointer hover:text-slate-900 transition">Template</span>
           <Link to="/project" className="hover:text-slate-900 transition">Project</Link>
           

@@ -67,17 +67,17 @@ const Login = () => {
           </svg>
         </button>
 
-        {/* FORM CONTAINER: Lebar dibatasi maksimal 420px agar bentuknya tetap slim dan ideal */}
-        <div className="w-full max-w-[420px] flex flex-col justify-center">
+        {/* FORM CONTAINER: Lebar dibatasi maksimal 380px agar bentuknya tetap slim dan ideal */}
+        <div className="w-full max-w-[380px] flex flex-col justify-center py-6">
 
           {/* TITLE: Menyesuaikan ukuran agar di device ter-zoom tidak terlihat raksasa */}
-          <h1 className="text-center text-[52px] md:text-[64px] font-bold text-[#74c0fc] mb-8 tracking-wide">
+          <h1 className="text-center text-3xl md:text-4xl font-extrabold text-[#74c0fc] mb-6 tracking-wide uppercase">
             Login
           </h1>
 
           {/* BOX ERROR MESSAGE */}
           {errorMsg && (
-            <div className="text-red-500 text-sm font-semibold mb-4 text-center bg-red-100 p-3 rounded-md border border-red-200 animate-fade-in">
+            <div className="text-red-500 text-xs font-semibold mb-4 text-center bg-red-100 p-2.5 rounded-md border border-red-200 animate-fade-in">
               {errorMsg}
             </div>
           )}
@@ -85,8 +85,8 @@ const Login = () => {
           <form onSubmit={handleLogin} className="w-full">
 
             {/* EMAIL */}
-            <div className="mb-5">
-              <label className="block text-[16px] md:text-[18px] font-semibold mb-2 text-black">
+            <div className="mb-4">
+              <label className="block text-xs font-bold mb-1.5 text-gray-800 uppercase tracking-wider">
                 Email
               </label>
               <input
@@ -94,13 +94,13 @@ const Login = () => {
                 placeholder="Input Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full h-[48px] px-4 border border-[#8fd0ff] rounded-md outline-none text-[15px] bg-transparent focus:ring-2 focus:ring-[#74c0fc] transition-all"
+                className="w-full h-11 px-4 border border-[#8fd0ff] rounded-lg outline-none text-xs bg-white focus:ring-2 focus:ring-[#74c0fc] transition-all shadow-sm font-medium"
               />
             </div>
 
             {/* PASSWORD */}
             <div className="mb-2">
-              <label className="block text-[16px] md:text-[18px] font-semibold mb-2 text-black">
+              <label className="block text-xs font-bold mb-1.5 text-gray-800 uppercase tracking-wider">
                 Password
               </label>
               <input
@@ -108,16 +108,16 @@ const Login = () => {
                 placeholder="Input Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full h-[48px] px-4 border border-[#8fd0ff] rounded-md outline-none text-[15px] bg-transparent focus:ring-2 focus:ring-[#74c0fc] transition-all"
+                className="w-full h-11 px-4 border border-[#8fd0ff] rounded-lg outline-none text-xs bg-white focus:ring-2 focus:ring-[#74c0fc] transition-all shadow-sm font-medium"
               />
             </div>
 
             {/* FORGOT PASSWORD */}
-            <div className="flex justify-end mb-6">
+            <div className="flex justify-end mb-5">
               <button
                 type="button"
                 onClick={() => navigate('/forgot-password')}
-                className="text-[#60a5fa] text-[13px] md:text-[14px] hover:underline bg-transparent border-none outline-none"
+                className="text-[#60a5fa] text-[11px] font-bold hover:underline bg-transparent border-none outline-none"
               >
                 Forgot Password?
               </button>
@@ -127,26 +127,26 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-[48px] bg-[#67b7f7] hover:bg-[#4da9f3] rounded-md text-white text-[18px] md:text-[20px] font-bold transition-all shadow-sm active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
+              className="w-full h-11 bg-[#67b7f7] hover:bg-[#4da9f3] rounded-lg text-white text-sm font-bold transition-all shadow-md active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed uppercase tracking-wider"
             >
               {loading ? 'Memproses...' : 'Login'}
             </button>
           </form>
 
           {/* DIVIDER */}
-          <div className="flex items-center gap-4 my-6">
-            <div className="flex-1 h-[1px] bg-gray-300"></div>
-            <span className="font-bold text-[16px] text-gray-500">OR</span>
-            <div className="flex-1 h-[1px] bg-gray-300"></div>
+          <div className="flex items-center gap-3 my-5">
+            <div className="flex-1 h-[1px] bg-gray-200"></div>
+            <span className="font-bold text-xs text-gray-400">OR</span>
+            <div className="flex-1 h-[1px] bg-gray-200"></div>
           </div>
 
           {/* GOOGLE BUTTON */}
           <button
             type="button"
-            className="w-full h-[48px] bg-[#67b7f7] hover:bg-[#4da9f3] rounded-md text-white font-semibold text-[16px] flex items-center justify-center gap-3 transition-all shadow-sm active:scale-[0.98]"
+            className="w-full h-11 bg-white border border-gray-300 hover:bg-gray-50 rounded-lg text-gray-700 font-bold text-xs flex items-center justify-center gap-3 transition-all shadow-sm active:scale-[0.98] uppercase tracking-wider"
           >
-            <div className="bg-white rounded-full p-1 flex items-center justify-center">
-              <svg width="18" height="18" viewBox="0 0 48 48">
+            <div className="bg-white rounded-full p-0.5 flex items-center justify-center">
+              <svg width="16" height="16" viewBox="0 0 48 48">
                 <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
                 <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
                 <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
@@ -157,11 +157,11 @@ const Login = () => {
           </button>
 
           {/* REGISTER */}
-          <p className="text-center mt-6 text-gray-500 text-[14px]">
+          <p className="text-center mt-5 text-gray-500 text-xs font-semibold">
             Not Registered Yet?{' '}
             <span
               onClick={() => navigate('/signup')}
-              className="text-[#60a5fa] font-semibold cursor-pointer hover:underline"
+              className="text-[#60a5fa] font-bold cursor-pointer hover:underline"
             >
               Sign Up
             </span>
