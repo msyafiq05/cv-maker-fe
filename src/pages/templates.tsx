@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 const Templates = () => {
   const navigate = useNavigate();
 
-  // Data dummy template sesuai kebutuhan menu Template
   const templateData = [
     { id: 1, name: 'Professional Blue' },
     { id: 2, name: 'Minimalist Black' },
