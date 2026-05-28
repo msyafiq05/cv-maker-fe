@@ -13,24 +13,22 @@ const Login = () => {
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setErrorMsg('');
 
-    if (!email || !password) {
-      alert('Mohon isi email dan password!');
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const res = await authApi.login({ email, password });
-      saveSession(res.data.token, res.data.user);
-      navigate('/');
-      window.location.reload();
-    } catch (err: any) {
-      console.error('Error login:', err);
-      setErrorMsg(err?.message ?? 'Email atau Password salah!');
-    } finally {
-      setLoading(false);
+    if (email && password) {
+      setLoading(true);
+      try {
+        const res = await authApi.login({ email, password });
+        saveSession(res.data.token, res.data.user);
+        navigate('/');
+        window.location.reload();
+      } catch (err: any) {
+        console.error('Error login:', err);
+        setErrorMsg(err?.message ?? 'Email atau Password salah!');
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      setErrorMsg('Mohon isi email dan password!');
     }
   };
 
@@ -47,7 +45,6 @@ const Login = () => {
       </div>
 
       {/* RIGHT SIDE: FORM LOGIN */}
-      {/* py-[5vh] memaksa padding atas bawah mengikuti skala tinggi device user secara elastis */}
       <div className="w-full lg:w-1/2 min-h-screen bg-[#f7f7f7] relative flex items-center justify-center px-6 md:px-16 py-[5vh]">
 
         {/* BACK BUTTON */}
@@ -67,10 +64,10 @@ const Login = () => {
           </svg>
         </button>
 
-        {/* FORM CONTAINER: Lebar dibatasi maksimal 380px agar bentuknya tetap slim dan ideal */}
+        {/* FORM CONTAINER */}
         <div className="w-full max-w-[380px] flex flex-col justify-center py-6">
 
-          {/* TITLE: Menyesuaikan ukuran agar di device ter-zoom tidak terlihat raksasa */}
+          {/* TITLE */}
           <h1 className="text-center text-3xl md:text-4xl font-extrabold text-[#74c0fc] mb-6 tracking-wide uppercase">
             Login
           </h1>
