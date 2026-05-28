@@ -1,31 +1,55 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import loginImg from '../assets/login.png';
+import { authApi } from '../services/api';
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
+  
+  // State UI
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState('');
   
-  // State untuk OTP (6 digit)
+  // State untuk OTP (6 digit) - Akan digunakan sebagai reset_token
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
 
-  // State untuk Step 3 (Password Baru)
+  // State untuk Password Baru
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  // STEP 1: Kirim Email
-  const handleSendOtp = (e: React.FormEvent<HTMLFormElement>) => {
+  // State API
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  // STEP 1: Kirim Email -> Dapat OTP / Token
+  const handleSendOtp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError('');
+    setSuccess('');
+
     if (!email) {
-      alert('Masukkan email terlebih dahulu!');
+      setError('Masukkan email terlebih dahulu!');
       return;
     }
-    setStep(2);
+
+    setLoading(true);
+    try {
+      // Panggil API Backend
+      const res = await authApi.forgotPassword(email);
+      // Backend mengembalikan reset_token (di production dikirim via email)
+      setSuccess('Kode OTP / Token telah dikirim. Silakan cek email Anda.');
+      setStep(2);
+    } catch (err: any) {
+      setError(err?.message ?? 'Email tidak ditemukan atau terjadi kesalahan.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   // STEP 2: Handle Input OTP
   const handleOtpChange = (value: string, index: number) => {
+    // Hanya izinkan angka
     if (!/^\d*$/.test(value)) return;
     const newOtp = [...otp];
     newOtp[index] = value;
@@ -40,44 +64,59 @@ const ForgotPassword = () => {
 
   // STEP 2: Verifikasi OTP (Pindah ke Step 3)
   const handleVerifyOtp = () => {
+    setError('');
     const finalOtp = otp.join('');
     if (finalOtp.length !== 6) {
-      alert('Masukkan kode OTP lengkap!');
+      setError('Masukkan kode OTP lengkap (6 digit)!');
       return;
     }
     setStep(3);
   };
 
-  // STEP 3: Simpan Password Baru (Pindah ke Step 4 / Success)
-  const handleUpdatePassword = (e: React.FormEvent<HTMLFormElement>) => {
+  // STEP 3: Simpan Password Baru -> Hit API Reset Password
+  const handleUpdatePassword = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError('');
+
     if (!newPassword || !confirmPassword) {
-      alert('Semua field password wajib diisi!');
+      setError('Semua field wajib diisi!');
       return;
     }
     if (newPassword !== confirmPassword) {
-      alert('Konfirmasi password tidak cocok!');
+      setError('Konfirmasi password tidak cocok!');
       return;
     }
-    
-    setStep(4);
+    if (newPassword.length < 6) {
+      setError('Password minimal 6 karakter!');
+      return;
+    }
+
+    setLoading(true);
+    const finalOtp = otp.join(''); // OTP 6 digit digunakan sebagai reset_token
+    try {
+      await authApi.resetPassword({
+        reset_token: finalOtp,
+        password: newPassword,
+        password_confirmation: confirmPassword,
+      });
+      setSuccess('Password berhasil direset!');
+      setStep(4); // Pindah ke halaman Success
+    } catch (err: any) {
+      setError(err?.message ?? 'Token / OTP tidak valid atau sudah kadaluarsa.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="w-full h-screen flex overflow-hidden bg-white">
-
-      {/* ================= LEFT IMAGE ================= */}
+      {/* LEFT IMAGE */}
       <div className="hidden lg:block lg:w-1/2 h-full">
-        <img
-          src={loginImg}
-          alt="forgot-password"
-          className="w-full h-full object-cover"
-        />
+        <img src={loginImg} alt="forgot-password" className="w-full h-full object-cover" />
       </div>
 
-      {/* ================= RIGHT CONTENT ================= */}
+      {/* RIGHT CONTENT */}
       <div className="w-full lg:w-1/2 h-full relative flex items-center justify-center bg-white">
-
         {/* BACK BUTTON */}
         {step < 4 && (
           <button
@@ -87,24 +126,22 @@ const ForgotPassword = () => {
             }}
             className="absolute top-8 left-8 text-gray-400 hover:text-black transition"
           >
-            <svg xmlns="http://www.w3.org/2000/xl" className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
           </button>
         )}
 
-        {/* ================= CONTAINER ================= */}
         <div className="w-full max-w-[550px] px-8 text-left">
-
-          {/* TITLE - Diubah ke text-left */}
+          {/* TITLE */}
           <h1 className="text-[54px] font-bold text-[#7ec8f8] whitespace-nowrap mb-2 text-left">
             {step === 3 && "Set a new password"}
             {step === 4 && "Successfull"}
             {step < 3 && "Forgot Password"}
           </h1>
 
-          {/* SUBTITLE / DESKRIPSI - Diubah ke text-left agar sejajar */}
-          <p className="text-[17px] text-gray-400 font-medium mb-12 text-left leading-relaxed">
+          {/* SUBTITLE / DESKRIPSI */}
+          <p className="text-[17px] text-gray-400 font-medium mb-8 text-left leading-relaxed">
             {step === 1 && "Please enter your email to reset the password"}
             {step === 2 && "We sent you a code to your email, please check your email!"}
             {step === 3 && (
@@ -115,7 +152,19 @@ const ForgotPassword = () => {
             {step === 4 && "Congratulations! Your password has been changed."}
           </p>
 
-          {/* ================= STEP 1: INPUT EMAIL ================= */}
+          {/* MENAMPILKAN PESAN ERROR / SUCCESS SECARA GLOBAL */}
+          {error && (
+            <div className="mb-6 px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm font-medium">
+              {error}
+            </div>
+          )}
+          {success && (
+            <div className="mb-6 px-4 py-3 bg-green-50 border border-green-200 rounded-xl text-green-600 text-sm font-medium">
+              {success}
+            </div>
+          )}
+
+          {/* STEP 1: INPUT EMAIL */}
           {step === 1 && (
             <form onSubmit={handleSendOtp} className="text-left">
               <div className="mb-8">
@@ -128,13 +177,17 @@ const ForgotPassword = () => {
                   className="w-full h-[56px] border border-[#8fd0ff] rounded-xl px-4 text-[18px] outline-none focus:ring-2 focus:ring-[#74c0fc]"
                 />
               </div>
-              <button type="submit" className="w-full h-[58px] bg-[#74c0fc] hover:bg-[#5bb6f5] text-white text-[20px] font-bold rounded-xl transition shadow-md">
-                Reset password
+              <button 
+                type="submit" 
+                disabled={loading}
+                className="w-full h-[58px] bg-[#74c0fc] hover:bg-[#5bb6f5] text-white text-[20px] font-bold rounded-xl transition shadow-md disabled:opacity-60"
+              >
+                {loading ? 'Sending...' : 'Reset password'}
               </button>
             </form>
           )}
 
-          {/* ================= STEP 2: INPUT OTP ================= */}
+          {/* STEP 2: INPUT OTP */}
           {step === 2 && (
             <div className="w-full">
               <div className="flex justify-between gap-2 mb-10">
@@ -155,19 +208,22 @@ const ForgotPassword = () => {
                 onClick={handleVerifyOtp}
                 className="w-full h-[58px] bg-[#74c0fc] hover:bg-[#5bb6f5] text-white text-[20px] font-bold rounded-xl transition shadow-md"
               >
-                Reset password
+                Verify OTP
               </button>
 
               <p className="text-[16px] text-gray-400 mt-8 text-center">
                 Haven't got the email yet?{' '}
-                <span className="text-[#74c0fc] font-bold cursor-pointer hover:underline">
-                  Resent email
+                <span 
+                  className="text-[#74c0fc] font-bold cursor-pointer hover:underline"
+                  onClick={() => { setStep(1); setError(''); }}
+                >
+                  Resend email
                 </span>
               </p>
             </div>
           )}
 
-          {/* ================= STEP 3: SET NEW PASSWORD ================= */}
+          {/* STEP 3: SET NEW PASSWORD */}
           {step === 3 && (
             <form onSubmit={handleUpdatePassword} className="text-left">
               <div className="mb-6">
@@ -194,16 +250,17 @@ const ForgotPassword = () => {
 
               <button
                 type="submit"
-                className="w-full h-[58px] bg-[#74c0fc] hover:bg-[#5bb6f5] text-white text-[20px] font-bold rounded-xl transition shadow-md"
+                disabled={loading}
+                className="w-full h-[58px] bg-[#74c0fc] hover:bg-[#5bb6f5] text-white text-[20px] font-bold rounded-xl transition shadow-md disabled:opacity-60"
               >
-                Update password
+                {loading ? 'Updating...' : 'Update password'}
               </button>
             </form>
           )}
 
-          {/* ================= STEP 4: SUCCESS PAGE ================= */}
+          {/* STEP 4: SUCCESS PAGE */}
           {step === 4 && (
-            <div className="w-full">
+            <div className="w-full mt-8">
               <button
                 onClick={() => navigate('/login')}
                 className="w-full h-[58px] bg-[#74c0fc] hover:bg-[#5bb6f5] text-white text-[20px] font-bold rounded-xl transition shadow-md"
@@ -212,7 +269,6 @@ const ForgotPassword = () => {
               </button>
             </div>
           )}
-
         </div>
       </div>
     </div>

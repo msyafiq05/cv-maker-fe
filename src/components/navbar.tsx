@@ -1,10 +1,14 @@
+// src/components/Navbar.tsx
+
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import logo from '../assets/logo.png';
+import { authApi, clearSession, getUser } from '../services/api';
 
 const Navbar = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const navigate   = useNavigate();
+  const location   = useLocation();
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  const user       = getUser();
 
   const handleTemplateClick = () => {
     if (!isLoggedIn && location.pathname === '/') {
@@ -14,14 +18,19 @@ const Navbar = () => {
     }
   };
 
-  // Diarahkan ke halaman login asli King
-  const handleLoginClick = () => {
-    navigate('/login');
-  };
+  const handleLoginClick = () => navigate('/login');
 
-  const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
-    window.location.reload();
+  // ─── Logout: hapus token di backend lalu bersihkan localStorage ──
+  const handleLogout = async () => {
+    try {
+      await authApi.logout();
+    } catch {
+      // lanjutkan meskipun request gagal
+    } finally {
+      clearSession();
+      navigate('/');
+      window.location.reload();
+    }
   };
 
   return (
@@ -43,14 +52,19 @@ const Navbar = () => {
           {isLoggedIn ? (
             <div className="flex items-center">
               <div onClick={() => navigate('/profile')} className="flex items-center gap-3 cursor-pointer group transition">
-                <div className="w-10 h-10 bg-white rounded-full border-2 border-sky-300 overflow-hidden group-hover:border-white transition shadow-sm">
-                  <img src="https://via.placeholder.com/150" alt="Profile" className="w-full h-full object-cover" />
+                <div className="w-10 h-10 bg-white rounded-full border-2 border-sky-300 overflow-hidden group-hover:border-white transition shadow-sm flex items-center justify-center">
+                  {/* Tampilkan inisial nama jika tidak ada avatar */}
+                  <span className="text-sky-500 font-bold text-sm">
+                    {user?.nama ? user.nama.charAt(0).toUpperCase() : 'U'}
+                  </span>
                 </div>
                 <svg className="w-5 h-5 text-white group-hover:translate-y-0.5 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
               </div>
-              <span onClick={handleLogout} className="ml-6 cursor-pointer text-xs font-bold bg-white/20 px-4 py-2 rounded-full hover:bg-white/30 transition text-white">Logout</span>
+              <span onClick={handleLogout} className="ml-6 cursor-pointer text-xs font-bold bg-white/20 px-4 py-2 rounded-full hover:bg-white/30 transition text-white">
+                Logout
+              </span>
             </div>
           ) : (
             <button 

@@ -3,6 +3,7 @@ import Layout from './components/layout';
 
 import LandingPage from './pages/landingpage';
 import Login from './pages/login';
+import Register from './pages/register';
 import Templates from './pages/templates';
 import Project from './pages/project';
 import EditCV from './pages/editcv';
@@ -25,8 +26,9 @@ function App() {
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         </Route>
 
-        {/* Halaman Login */}
+        {/* Halaman Login & Register */}
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
         {/* Halaman Forgot Password */}
         <Route

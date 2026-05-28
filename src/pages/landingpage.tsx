@@ -3,17 +3,18 @@
 import { useNavigate } from 'react-router-dom';
 import landingPageImg from '../assets/landingpage.png';
 import landingPage2Img from '../assets/landingpage2.png';
+import BlackWhiteTemplates from '../components/templates/BlackWhiteTemplates';
 
 const LandingPage = () => {
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
   const navigate = useNavigate();
 
   const previewTemplates = [
-    { id: 1, name: 'Professional Blue', img: 'https://via.placeholder.com/400x600' },
-    { id: 2, name: 'Minimalist Pink', img: 'https://via.placeholder.com/400x600' },
-    { id: 3, name: 'Modern Gold', img: 'https://via.placeholder.com/400x600' },
-    { id: 4, name: 'Clean Blue', img: 'https://via.placeholder.com/400x600' },
-    { id: 5, name: 'Elegant Mono', img: 'https://via.placeholder.com/400x600' },
+    { id: 1, name: 'PROFESSIONAL BLUE', img: 'https://via.placeholder.com/400x600', isPreview: false },
+    { id: 2, name: 'MINIMALIST BLACK', img: '', isPreview: true },
+    { id: 3, name: 'MODERN CREATIVE', img: 'https://via.placeholder.com/400x600', isPreview: false },
+    { id: 4, name: 'ATS FRIENDLY', img: 'https://via.placeholder.com/400x600', isPreview: false },
+    { id: 5, name: 'EXECUTIVE ELEGANCE', img: 'https://via.placeholder.com/400x600', isPreview: false },
   ];
 
   return (
@@ -73,10 +74,10 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {!isLoggedIn && (
-        <section id="template-section" className="bg-white py-16 pb-32">
+      {/* Template Section - Always visible */}
+      <section id="template-section" className="bg-white py-16 pb-32">
           <div className="max-w-7xl mx-auto px-8">
-            <h2 className="text-center text-5xl font-bold text-[#55B3EB] mb-16 tracking-widest uppercase">
+            <h2 className="text-center text-5xl font-bold italic text-[#55B3EB] mb-16 tracking-widest uppercase">
               TEMPLATE
             </h2>
             
@@ -85,26 +86,35 @@ const LandingPage = () => {
                 <div 
                   key={item.id} 
                   onClick={() => navigate('/templates')}
-                  className="group cursor-pointer relative"
+                  className="flex flex-col items-center group cursor-pointer"
                 >
-                  <div className="relative aspect-[3/4] overflow-hidden rounded-xl border border-slate-200 shadow-sm group-hover:shadow-xl group-hover:border-sky-300 transition-all duration-300">
-                    <img 
-                      src={item.img} 
-                      alt={item.name} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-sky-900/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <div className="bg-white px-5 py-2 rounded-lg font-bold text-sky-500 shadow-md translate-y-2 group-hover:translate-y-0 transition-transform text-sm">
+                  <div className="w-full relative aspect-[3/4] overflow-hidden rounded-xl border-2 border-slate-100 shadow-sm group-hover:shadow-xl group-hover:border-[#55B3EB] transition-all duration-300 bg-white flex items-center justify-center">
+                    {!item.isPreview && item.img && (
+                      <img 
+                        src={item.img} 
+                        alt={item.name} 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    )}
+                    {item.isPreview ? (
+                      <div className="pointer-events-none absolute top-0 left-0" style={{ width: '800px', height: '1131px', transform: 'scale(0.28)', transformOrigin: 'top left' }}>
+                        <BlackWhiteTemplates />
+                      </div>
+                    ) : null}
+                    
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-[#3D769A]/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center z-10">
+                      <div className="bg-white px-5 py-2 rounded-lg font-bold text-[#55B3EB] shadow-md translate-y-2 group-hover:translate-y-0 transition-transform text-sm">
                         Use Template
                       </div>
                     </div>
                   </div>
+                  <span className="mt-6 text-[11px] font-bold text-slate-800 uppercase tracking-widest text-center">{item.name}</span>
                 </div>
               ))}
             </div>
           </div>
-        </section>
-      )}
+      </section>
     </>
   );
 };
