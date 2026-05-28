@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import loginImg from '../assets/login.png';
+import { authApi, saveSession } from '../services/api';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -8,6 +9,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -18,32 +20,17 @@ const Login = () => {
       return;
     }
 
+    setLoading(true);
     try {
-      const response = await fetch('http://localhost:8000/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('isLoggedIn', 'true');
-        navigate('/');
-        window.location.reload();
-      } else {
-        setErrorMsg(data.message || 'Email atau Password salah!');
-      }
-    } catch (error) {
-      console.error('Error login:', error);
-      setErrorMsg('Gagal terhubung ke server backend. Pastikan Laravel sudah jalan (php artisan serve)!');
+      const res = await authApi.login({ email, password });
+      saveSession(res.data.token, res.data.user);
+      navigate('/');
+      window.location.reload();
+    } catch (err: any) {
+      console.error('Error login:', err);
+      setErrorMsg(err?.message ?? 'Email atau Password salah!');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -139,9 +126,10 @@ const Login = () => {
             {/* LOGIN BUTTON */}
             <button
               type="submit"
-              className="w-full h-[48px] bg-[#67b7f7] hover:bg-[#4da9f3] rounded-md text-white text-[18px] md:text-[20px] font-bold transition-all shadow-sm active:scale-[0.98]"
+              disabled={loading}
+              className="w-full h-[48px] bg-[#67b7f7] hover:bg-[#4da9f3] rounded-md text-white text-[18px] md:text-[20px] font-bold transition-all shadow-sm active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              Login
+              {loading ? 'Memproses...' : 'Login'}
             </button>
           </form>
 
