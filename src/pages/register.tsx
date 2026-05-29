@@ -34,7 +34,7 @@ const Register = () => {
     setLoading(true);
     try {
       const res = await authApi.register(form);
-      saveSession(res.data.token, res.data.user);
+      saveSession(res.token, res.user);
       navigate('/');
       window.location.reload();
     } catch (err: any) {

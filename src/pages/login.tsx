@@ -18,7 +18,7 @@ const Login = () => {
       setLoading(true);
       try {
         const res = await authApi.login({ email, password });
-        saveSession(res.data.token, res.data.user);
+        saveSession(res.token, res.user);
         navigate('/');
         window.location.reload();
       } catch (err: any) {

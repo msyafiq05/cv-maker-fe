@@ -42,32 +42,32 @@ export const authApi = {
     password: string;
     password_confirmation: string;
   }) =>
-    fetch(`${BASE_URL}/auth/register`, {
+    fetch(`${BASE_URL}/register`, {
       method: 'POST',
       headers: headers(false),
       body: JSON.stringify(data),
     }).then(handleResponse),
 
   login: (data: { email: string; password: string }) =>
-    fetch(`${BASE_URL}/auth/login`, {
+    fetch(`${BASE_URL}/login`, {
       method: 'POST',
       headers: headers(false),
       body: JSON.stringify(data),
     }).then(handleResponse),
 
   logout: () =>
-    fetch(`${BASE_URL}/auth/logout`, {
+    fetch(`${BASE_URL}/logout`, {
       method: 'POST',
       headers: headers(),
     }).then(handleResponse),
 
   me: () =>
-    fetch(`${BASE_URL}/auth/me`, {
+    fetch(`${BASE_URL}/me`, {
       headers: headers(),
     }).then(handleResponse),
 
   forgotPassword: (email: string) =>
-    fetch(`${BASE_URL}/auth/forgot-password`, {
+    fetch(`${BASE_URL}/forgot-password`, {
       method: 'POST',
       headers: headers(false),
       body: JSON.stringify({ email }),
@@ -78,7 +78,7 @@ export const authApi = {
     password: string;
     password_confirmation: string;
   }) =>
-    fetch(`${BASE_URL}/auth/reset-password`, {
+    fetch(`${BASE_URL}/reset-password`, {
       method: 'POST',
       headers: headers(false),
       body: JSON.stringify(data),
@@ -125,27 +125,27 @@ export const templateApi = {
 
 export const projectApi = {
   getAll: () =>
-    fetch(`${BASE_URL}/projects`, { headers: headers() }).then(handleResponse),
+    fetch(`${BASE_URL}/cv-projects`, { headers: headers() }).then(handleResponse),
 
   getById: (id: number) =>
-    fetch(`${BASE_URL}/projects/${id}`, { headers: headers() }).then(handleResponse),
+    fetch(`${BASE_URL}/cv-projects/${id}`, { headers: headers() }).then(handleResponse),
 
   create: (data?: { judul_cv?: string; template_id?: number }) =>
-    fetch(`${BASE_URL}/projects`, {
+    fetch(`${BASE_URL}/cv-projects`, {
       method: 'POST',
       headers: headers(),
       body: JSON.stringify(data ?? { judul_cv: 'Untitled Resume' }),
     }).then(handleResponse),
 
   update: (id: number, data: { judul_cv?: string; template_id?: number }) =>
-    fetch(`${BASE_URL}/projects/${id}`, {
+    fetch(`${BASE_URL}/cv-projects/${id}`, {
       method: 'PUT',
       headers: headers(),
       body: JSON.stringify(data),
     }).then(handleResponse),
 
   delete: (id: number) =>
-    fetch(`${BASE_URL}/projects/${id}`, {
+    fetch(`${BASE_URL}/cv-projects/${id}`, {
       method: 'DELETE',
       headers: headers(),
     }).then(handleResponse),
@@ -157,12 +157,12 @@ export const projectApi = {
 
 export const personalDetailApi = {
   get: (projectId: number) =>
-    fetch(`${BASE_URL}/projects/${projectId}/personal-detail`, {
+    fetch(`${BASE_URL}/cv-projects/${projectId}/personal-detail`, {
       headers: headers(),
     }).then(handleResponse),
 
   upsert: (projectId: number, data: Record<string, string>) =>
-    fetch(`${BASE_URL}/projects/${projectId}/personal-detail`, {
+    fetch(`${BASE_URL}/cv-projects/${projectId}/personal-detail`, {
       method: 'POST',
       headers: headers(),
       body: JSON.stringify(data),
@@ -175,26 +175,26 @@ export const personalDetailApi = {
 
 export const employmentApi = {
   getAll: (projectId: number) =>
-    fetch(`${BASE_URL}/projects/${projectId}/employment-histories`, {
+    fetch(`${BASE_URL}/cv-projects/${projectId}/employments`, {
       headers: headers(),
     }).then(handleResponse),
 
   create: (projectId: number, data: Record<string, string>) =>
-    fetch(`${BASE_URL}/projects/${projectId}/employment-histories`, {
+    fetch(`${BASE_URL}/cv-projects/${projectId}/employments`, {
       method: 'POST',
       headers: headers(),
       body: JSON.stringify(data),
     }).then(handleResponse),
 
   update: (projectId: number, id: number, data: Record<string, string>) =>
-    fetch(`${BASE_URL}/projects/${projectId}/employment-histories/${id}`, {
+    fetch(`${BASE_URL}/cv-projects/${projectId}/employments/${id}`, {
       method: 'PUT',
       headers: headers(),
       body: JSON.stringify(data),
     }).then(handleResponse),
 
   delete: (projectId: number, id: number) =>
-    fetch(`${BASE_URL}/projects/${projectId}/employment-histories/${id}`, {
+    fetch(`${BASE_URL}/cv-projects/${projectId}/employments/${id}`, {
       method: 'DELETE',
       headers: headers(),
     }).then(handleResponse),
@@ -206,26 +206,26 @@ export const employmentApi = {
 
 export const educationApi = {
   getAll: (projectId: number) =>
-    fetch(`${BASE_URL}/projects/${projectId}/educations`, {
+    fetch(`${BASE_URL}/cv-projects/${projectId}/educations`, {
       headers: headers(),
     }).then(handleResponse),
 
   create: (projectId: number, data: Record<string, string>) =>
-    fetch(`${BASE_URL}/projects/${projectId}/educations`, {
+    fetch(`${BASE_URL}/cv-projects/${projectId}/educations`, {
       method: 'POST',
       headers: headers(),
       body: JSON.stringify(data),
     }).then(handleResponse),
 
   update: (projectId: number, id: number, data: Record<string, string>) =>
-    fetch(`${BASE_URL}/projects/${projectId}/educations/${id}`, {
+    fetch(`${BASE_URL}/cv-projects/${projectId}/educations/${id}`, {
       method: 'PUT',
       headers: headers(),
       body: JSON.stringify(data),
     }).then(handleResponse),
 
   delete: (projectId: number, id: number) =>
-    fetch(`${BASE_URL}/projects/${projectId}/educations/${id}`, {
+    fetch(`${BASE_URL}/cv-projects/${projectId}/educations/${id}`, {
       method: 'DELETE',
       headers: headers(),
     }).then(handleResponse),
@@ -237,26 +237,26 @@ export const educationApi = {
 
 export const skillApi = {
   getAll: (projectId: number) =>
-    fetch(`${BASE_URL}/projects/${projectId}/skills`, {
+    fetch(`${BASE_URL}/cv-projects/${projectId}/skills`, {
       headers: headers(),
     }).then(handleResponse),
 
   create: (projectId: number, data: Record<string, string>) =>
-    fetch(`${BASE_URL}/projects/${projectId}/skills`, {
+    fetch(`${BASE_URL}/cv-projects/${projectId}/skills`, {
       method: 'POST',
       headers: headers(),
       body: JSON.stringify(data),
     }).then(handleResponse),
 
   update: (projectId: number, id: number, data: Record<string, string>) =>
-    fetch(`${BASE_URL}/projects/${projectId}/skills/${id}`, {
+    fetch(`${BASE_URL}/cv-projects/${projectId}/skills/${id}`, {
       method: 'PUT',
       headers: headers(),
       body: JSON.stringify(data),
     }).then(handleResponse),
 
   delete: (projectId: number, id: number) =>
-    fetch(`${BASE_URL}/projects/${projectId}/skills/${id}`, {
+    fetch(`${BASE_URL}/cv-projects/${projectId}/skills/${id}`, {
       method: 'DELETE',
       headers: headers(),
     }).then(handleResponse),
@@ -268,26 +268,26 @@ export const skillApi = {
 
 export const organizationApi = {
   getAll: (projectId: number) =>
-    fetch(`${BASE_URL}/projects/${projectId}/organizations`, {
+    fetch(`${BASE_URL}/cv-projects/${projectId}/organizations`, {
       headers: headers(),
     }).then(handleResponse),
 
   create: (projectId: number, data: Record<string, string>) =>
-    fetch(`${BASE_URL}/projects/${projectId}/organizations`, {
+    fetch(`${BASE_URL}/cv-projects/${projectId}/organizations`, {
       method: 'POST',
       headers: headers(),
       body: JSON.stringify(data),
     }).then(handleResponse),
 
   update: (projectId: number, id: number, data: Record<string, string>) =>
-    fetch(`${BASE_URL}/projects/${projectId}/organizations/${id}`, {
+    fetch(`${BASE_URL}/cv-projects/${projectId}/organizations/${id}`, {
       method: 'PUT',
       headers: headers(),
       body: JSON.stringify(data),
     }).then(handleResponse),
 
   delete: (projectId: number, id: number) =>
-    fetch(`${BASE_URL}/projects/${projectId}/organizations/${id}`, {
+    fetch(`${BASE_URL}/cv-projects/${projectId}/organizations/${id}`, {
       method: 'DELETE',
       headers: headers(),
     }).then(handleResponse),

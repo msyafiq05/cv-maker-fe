@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import signupImg from '../assets/signup.png'; 
+import { authApi } from '../services/api';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -16,19 +17,43 @@ const Signup = () => {
 
   // State pengontrol: jika true, tampilan otomatis berubah ke "Success Page"
   const [isSuccess, setIsSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSignup = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (name && username && email && password && verifyPassword) {
-      if (password !== verifyPassword) {
-        alert('Password dan Verify Password tidak cocok!');
-        return;
-      }
-      
+    setError('');
+
+    if (!name || !username || !email || !password || !verifyPassword) {
+      setError('Mohon isi semua field!');
+      return;
+    }
+
+    if (password !== verifyPassword) {
+      setError('Password dan Verify Password tidak cocok!');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await authApi.register({
+        nama: name,
+        username,
+        email,
+        password,
+        password_confirmation: verifyPassword,
+      });
+
       // Mengubah state menjadi true untuk menampilkan halaman sukses registrasi
       setIsSuccess(true);
-    } else {
-      alert('Mohon isi semua field!');
+    } catch (err: any) {
+      // Tampilkan error validasi dari backend
+      const firstError = err?.errors
+        ? (Object.values(err.errors)[0] as string[]).join(', ')
+        : null;
+      setError(firstError ?? err?.message ?? 'Registrasi gagal.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -55,6 +80,12 @@ const Signup = () => {
             <h1 className="text-center text-[48px] md:text-[56px] font-bold text-[#74c0fc] mb-5 tracking-wide">
               Sign up
             </h1>
+
+            {error && (
+              <div className="mb-4 px-4 py-3 bg-red-50 border border-red-200 rounded-md text-red-600 text-sm font-medium">
+                {error}
+              </div>
+            )}
 
             <form onSubmit={handleSignup} className="w-full space-y-[14px]">
               {/* NAME */}
@@ -131,9 +162,10 @@ const Signup = () => {
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full h-[46px] bg-[#67b7f7] hover:bg-[#4da9f3] rounded-md text-white text-[18px] md:text-[20px] font-bold transition-all shadow-sm active:scale-[0.99]"
+                  disabled={loading}
+                  className="w-full h-[46px] bg-[#67b7f7] hover:bg-[#4da9f3] rounded-md text-white text-[18px] md:text-[20px] font-bold transition-all shadow-sm active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  Sign up
+                  {loading ? 'Mendaftar...' : 'Sign up'}
                 </button>
               </div>
             </form>

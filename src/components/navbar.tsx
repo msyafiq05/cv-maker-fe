@@ -5,10 +5,10 @@ import logo from '../assets/logo.png';
 import { authApi, clearSession, getUser } from '../services/api';
 
 const Navbar = () => {
-  const navigate   = useNavigate();
-  const location   = useLocation();
+  const navigate = useNavigate();
+  const location = useLocation();
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-  const user       = getUser();
+  const user = getUser();
 
   const handleTemplateClick = () => {
     if (!isLoggedIn && location.pathname === '/') {
@@ -51,13 +51,13 @@ const Navbar = () => {
           </div>
           <span className="text-2xl font-extrabold text-white tracking-tight uppercase">CV MAKER</span>
         </div>
-        
+
         <div className="flex items-center gap-8 font-medium text-slate-800 text-sm">
           <Link to="/" className="hover:text-slate-900 transition">Home</Link>
           <span onClick={handleAboutUsClick} className="cursor-pointer hover:text-slate-900 transition">About us</span>
           <span onClick={handleTemplateClick} className="cursor-pointer hover:text-slate-900 transition">Template</span>
           <Link to="/project" className="hover:text-slate-900 transition">Project</Link>
-          
+
           {isLoggedIn ? (
             <div className="flex items-center">
               <div onClick={() => navigate('/profile')} className="flex items-center gap-3 cursor-pointer group transition">
@@ -67,16 +67,14 @@ const Navbar = () => {
                     {user?.nama ? user.nama.charAt(0).toUpperCase() : 'U'}
                   </span>
                 </div>
-                <svg className="w-5 h-5 text-white group-hover:translate-y-0.5 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
+
               </div>
-              <span onClick={handleLogout} className="ml-6 cursor-pointer text-xs font-bold bg-white/20 px-4 py-2 rounded-full hover:bg-white/30 transition text-white">
+              <span onClick={handleLogout} className="ml-6 cursor-pointer text-xs font-bold bg-white/90 px-4 py-2 rounded-full hover:bg-white transition text-blue-400">
                 Logout
               </span>
             </div>
           ) : (
-            <button 
+            <button
               onClick={handleLoginClick}
               className="bg-white text-slate-800 px-6 py-1.5 rounded-full font-medium text-sm hover:bg-slate-50 transition shadow-sm"
             >
