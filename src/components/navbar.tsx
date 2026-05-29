@@ -69,7 +69,7 @@ const Navbar = () => {
                 </div>
 
               </div>
-              <span onClick={handleLogout} className="ml-6 cursor-pointer text-xs font-bold bg-white/90 px-4 py-2 rounded-full hover:bg-white transition text-blue-400">
+              <span onClick={handleLogout} className="ml-6 cursor-pointer text-xs font-bold bg-white px-4 py-2 rounded-full hover:bg-white transition text-black">
                 Logout
               </span>
             </div>
