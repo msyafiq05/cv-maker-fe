@@ -20,11 +20,15 @@ const Login = () => {
         const res = await authApi.login({ email, password });
         saveSession(res.token, res.user);
 
+        // =========================================================
+        // BAGIAN PENAMBAHAN UNTUK MENYAMBUNGKAN KE HALAMAN ADMIN
+        // =========================================================
         if (res.user && res.user.role === 'admin') {
           navigate('/admin/dashboard');
         } else {
           navigate('/');
         }
+        // =========================================================
 
         window.location.reload();
       } catch (err: any) {
