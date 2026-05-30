@@ -44,10 +44,8 @@ const Signup = () => {
         password_confirmation: verifyPassword,
       });
 
-      // Mengubah state menjadi true untuk menampilkan halaman sukses registrasi
       setIsSuccess(true);
     } catch (err: any) {
-      // Tampilkan error validasi dari backend
       const firstError = err?.errors
         ? (Object.values(err.errors)[0] as string[]).join(', ')
         : null;
@@ -58,39 +56,45 @@ const Signup = () => {
   };
 
   return (
-    <div className="w-full min-h-screen flex bg-[#f5f5f5] overflow-x-hidden select-none">
+    // Menggunakan h-screen dan overflow-hidden agar pas dengan tinggi layar device
+    <div className="w-full h-screen flex bg-[#f5f5f5] overflow-hidden select-none">
 
-      {/* LEFT SIDE: BACKGROUND BIRU JALAN TERUS (BERLAKU UNTUK KEDUA HALAMAN) */}
-      <div className="hidden lg:flex lg:w-1/2 h-screen sticky top-0 bg-[#7fc7ff] items-center justify-center p-12 xl:p-16">
+      {/* ========================================================= */}
+      {/* SISI KIRI (BIRU): TEPAT SETENGAH LAYAR (50%)              */}
+      {/* ========================================================= */}
+      <div className="hidden lg:flex lg:w-1/2 h-full bg-[#7fc7ff] items-center justify-center p-12">
         <img
           src={signupImg}
           alt="Sign up illustration"
-          className="w-full h-auto max-w-[380px] xl:max-w-[440px] object-contain" 
+          // max-w dan max-h mengontrol agar gambar tidak membesar berlebihan walaupun kontainernya 50%
+          className="w-full max-w-[340px] xl:max-w-[400px] max-h-[65vh] object-contain animate-fade-in" 
         />
       </div>
 
-      {/* RIGHT SIDE: KONDISIONAL RENDER (FORM / SUCCESS PAGE) */}
-      <div className="w-full lg:w-1/2 min-h-screen bg-white relative flex items-center justify-center px-6 md:px-16 py-[4vh]">
+      {/* ========================================================= */}
+      {/* SISI KANAN (FORM): TEPAT SETENGAH LAYAR (50%)             */}
+      {/* ========================================================= */}
+      <div className="w-full lg:w-1/2 h-full bg-white flex items-center justify-center px-6 sm:px-12 md:px-16 py-4">
         
         {!isSuccess ? (
-          /* ========================================================= */
-          /* 1. TAMPILAN AWAL: FORM REGISTER                         */
-          /* ========================================================= */
-          <div className="w-full max-w-[420px] flex flex-col justify-center animate-fade-in">
-            <h1 className="text-center text-[48px] md:text-[56px] font-bold text-[#74c0fc] mb-5 tracking-wide">
+          /* 1. TAMPILAN AWAL: FORM REGISTER */
+          <div className="w-full max-w-[360px] max-h-full flex flex-col justify-center animate-fade-in">
+            
+            <h1 className="text-center text-[32px] sm:text-[36px] md:text-[40px] font-bold text-[#74c0fc] mb-2 md:mb-4 tracking-wide">
               Sign up
             </h1>
 
             {error && (
-              <div className="mb-4 px-4 py-3 bg-red-50 border border-red-200 rounded-md text-red-600 text-sm font-medium">
+              <div className="mb-2 px-4 py-1.5 bg-red-50 border border-red-200 rounded-md text-red-600 text-xs sm:text-sm font-medium">
                 {error}
               </div>
             )}
 
-            <form onSubmit={handleSignup} className="w-full space-y-[14px]">
+            {/* Jarak antar input form yang dinamis & pas di layar laptop */}
+            <form onSubmit={handleSignup} className="w-full space-y-[6px] sm:space-y-[10px] md:space-y-[12px]">
               {/* NAME */}
-              <div>
-                <label className="block text-[15px] md:text-[16px] font-semibold mb-1 text-black">
+              <div className="flex flex-col">
+                <label className="text-[13px] md:text-[14px] font-semibold mb-0.5 text-black">
                   Name
                 </label>
                 <input
@@ -98,13 +102,13 @@ const Signup = () => {
                   placeholder="Input Name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full h-[44px] px-4 border border-[#8fd0ff] rounded-md outline-none text-[14px] md:text-[15px] bg-transparent focus:ring-2 focus:ring-[#74c0fc] transition-all"
+                  className="w-full h-[36px] sm:h-[38px] md:h-[40px] px-4 border border-[#8fd0ff] rounded-md outline-none text-[13px] md:text-[14px] bg-transparent focus:ring-2 focus:ring-[#74c0fc] transition-all"
                 />
               </div>
 
               {/* USERNAME */}
-              <div>
-                <label className="block text-[15px] md:text-[16px] font-semibold mb-1 text-black">
+              <div className="flex flex-col">
+                <label className="text-[13px] md:text-[14px] font-semibold mb-0.5 text-black">
                   Username
                 </label>
                 <input
@@ -112,13 +116,13 @@ const Signup = () => {
                   placeholder="Input Username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="w-full h-[44px] px-4 border border-[#8fd0ff] rounded-md outline-none text-[14px] md:text-[15px] bg-transparent focus:ring-2 focus:ring-[#74c0fc] transition-all"
+                  className="w-full h-[36px] sm:h-[38px] md:h-[40px] px-4 border border-[#8fd0ff] rounded-md outline-none text-[13px] md:text-[14px] bg-transparent focus:ring-2 focus:ring-[#74c0fc] transition-all"
                 />
               </div>
 
               {/* EMAIL */}
-              <div>
-                <label className="block text-[15px] md:text-[16px] font-semibold mb-1 text-black">
+              <div className="flex flex-col">
+                <label className="text-[13px] md:text-[14px] font-semibold mb-0.5 text-black">
                   Email
                 </label>
                 <input
@@ -126,13 +130,13 @@ const Signup = () => {
                   placeholder="Input Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full h-[44px] px-4 border border-[#8fd0ff] rounded-md outline-none text-[14px] md:text-[15px] bg-transparent focus:ring-2 focus:ring-[#74c0fc] transition-all"
+                  className="w-full h-[36px] sm:h-[38px] md:h-[40px] px-4 border border-[#8fd0ff] rounded-md outline-none text-[13px] md:text-[14px] bg-transparent focus:ring-2 focus:ring-[#74c0fc] transition-all"
                 />
               </div>
 
               {/* PASSWORD */}
-              <div>
-                <label className="block text-[15px] md:text-[16px] font-semibold mb-1 text-black">
+              <div className="flex flex-col">
+                <label className="text-[13px] md:text-[14px] font-semibold mb-0.5 text-black">
                   Password
                 </label>
                 <input
@@ -140,13 +144,13 @@ const Signup = () => {
                   placeholder="Input Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full h-[44px] px-4 border border-[#8fd0ff] rounded-md outline-none text-[14px] md:text-[15px] bg-transparent focus:ring-2 focus:ring-[#74c0fc] transition-all"
+                  className="w-full h-[36px] sm:h-[38px] md:h-[40px] px-4 border border-[#8fd0ff] rounded-md outline-none text-[13px] md:text-[14px] bg-transparent focus:ring-2 focus:ring-[#74c0fc] transition-all"
                 />
               </div>
 
               {/* VERIFY PASSWORD */}
-              <div>
-                <label className="block text-[15px] md:text-[16px] font-semibold mb-1 text-black">
+              <div className="flex flex-col">
+                <label className="text-[13px] md:text-[14px] font-semibold mb-0.5 text-black">
                   Verify Password
                 </label>
                 <input
@@ -154,7 +158,7 @@ const Signup = () => {
                   placeholder="Input Verify Password"
                   value={verifyPassword}
                   onChange={(e) => setVerifyPassword(e.target.value)}
-                  className="w-full h-[44px] px-4 border border-[#8fd0ff] rounded-md outline-none text-[14px] md:text-[15px] bg-transparent focus:ring-2 focus:ring-[#74c0fc] transition-all"
+                  className="w-full h-[36px] sm:h-[38px] md:h-[40px] px-4 border border-[#8fd0ff] rounded-md outline-none text-[13px] md:text-[14px] bg-transparent focus:ring-2 focus:ring-[#74c0fc] transition-all"
                 />
               </div>
 
@@ -163,14 +167,14 @@ const Signup = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full h-[46px] bg-[#67b7f7] hover:bg-[#4da9f3] rounded-md text-white text-[18px] md:text-[20px] font-bold transition-all shadow-sm active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="w-full h-[38px] md:h-[42px] bg-[#67b7f7] hover:bg-[#4da9f3] rounded-md text-white text-[15px] md:text-[16px] font-bold transition-all shadow-sm active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {loading ? 'Mendaftar...' : 'Sign up'}
                 </button>
               </div>
             </form>
 
-            <p className="text-center mt-5 text-gray-500 text-[14px]">
+            <p className="text-center mt-3 text-gray-500 text-[13px] sm:text-[14px]">
               Already have account?{' '}
               <span
                 onClick={() => navigate('/login')}
@@ -181,25 +185,19 @@ const Signup = () => {
             </p>
           </div>
         ) : (
-          /* ========================================================= */
-          /* 2. TAMPILAN KEDUA: SIGN UP SUCCESS (SEKALI COPY PASTE)     */
-          /* ========================================================= */
-          <div className="w-full max-w-[440px] flex flex-col items-center justify-center text-center animate-fade-in px-4">
-            
-            {/* Judul Besar Sesuai Desain Figma */}
-            <h2 className="text-[40px] md:text-[52px] font-bold text-[#67b7f7] leading-tight tracking-wide">
-              Successfull
+          /* 2. TAMPILAN KEDUA: SIGN UP SUCCESS */
+          <div className="w-full max-w-[360px] flex flex-col items-center justify-center text-center animate-fade-in px-4">
+            <h2 className="text-[32px] md:text-[40px] font-bold text-[#67b7f7] leading-tight tracking-wide">
+              Successful
             </h2>
             
-            {/* Sub-text Keterangan */}
-            <p className="text-gray-400 text-[14px] md:text-[15px] mt-2 mb-8 max-w-[320px] font-medium leading-relaxed">
+            <p className="text-gray-400 text-[13px] md:text-[14px] mt-2 mb-6 max-w-[280px] font-medium leading-relaxed">
               Congratulations! Your account has been registered.
             </p>
 
-            {/* Tombol Utama menuju Login Page */}
             <button
               onClick={() => navigate('/login')}
-              className="w-full h-[48px] bg-[#67b7f7] hover:bg-[#4da9f3] rounded-md text-white text-[16px] md:text-[18px] font-bold transition-all shadow-md shadow-blue-100 active:scale-[0.98]"
+              className="w-full h-[40px] md:h-[44px] bg-[#67b7f7] hover:bg-[#4da9f3] rounded-md text-white text-[14px] md:text-[16px] font-bold transition-all shadow-md shadow-blue-100 active:scale-[0.98]"
             >
               Go to login
             </button>

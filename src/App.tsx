@@ -15,8 +15,8 @@ import ContactUs from './pages/contactus';
 import AtsTips from './pages/atstips';
 import DesignGuide from './pages/designguide';
 import TermsOfService from './pages/termsofservice';
+import AdminDashboard from './pages/admin'; 
 
-// Step Pages
 import EditCvStep1 from './pages/EditCvStep1';
 import EditCvStep2 from './pages/EditCvStep2';
 import EditCvStep3 from './pages/EditCvStep3';
@@ -25,7 +25,6 @@ import EditCvStep5 from './pages/EditCvStep5';
 import DownloadCv from './pages/DownloadCv';
 import { CvEditProvider } from './context/CvEditContext';
 
-// Wrapper to share CV context state across all step routes
 const CvEditProviderWrapper = () => (
   <CvEditProvider>
     <Outlet />
@@ -80,7 +79,13 @@ function App() {
         {/* Halaman Sign Up */}
         <Route 
           path="/signup" 
-          element={<Signup />} // <-- 2. TAMBAH ROUTE SIGNUP DI SINI
+          element={<Signup />}
+        />
+
+        {/* Halaman Admin Dashboard */}
+        <Route 
+          path="/admin/dashboard" 
+          element={<AdminDashboard />} 
         />
 
       </Routes>

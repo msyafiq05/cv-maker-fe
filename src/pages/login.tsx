@@ -19,7 +19,13 @@ const Login = () => {
       try {
         const res = await authApi.login({ email, password });
         saveSession(res.token, res.user);
-        navigate('/');
+
+        if (res.user && res.user.role === 'admin') {
+          navigate('/admin/dashboard');
+        } else {
+          navigate('/');
+        }
+
         window.location.reload();
       } catch (err: any) {
         console.error('Error login:', err);
