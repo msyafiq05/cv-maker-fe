@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import loginImg from '../assets/login.png';
 import { authApi, saveSession } from '../services/api';
@@ -31,6 +31,34 @@ const Login = () => {
       setErrorMsg('Mohon isi email dan password!');
     }
   };
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+
+    if (token) {
+      setLoading(true);
+      // Simpan sementara agar authApi.me() bisa menggunakan token ini
+      localStorage.setItem('token', token);
+      
+      authApi.me()
+        .then((res) => {
+          saveSession(token, res.user);
+          navigate('/');
+          window.location.reload();
+        })
+        .catch((err) => {
+          console.error('Error fetching Google user:', err);
+          setErrorMsg('Gagal login via Google. Silakan coba lagi.');
+          localStorage.removeItem('token');
+        })
+        .finally(() => {
+          setLoading(false);
+          // Bersihkan URL dari token
+          window.history.replaceState({}, document.title, '/login');
+        });
+    }
+  }, [navigate]);
 
   return (
     <div className="w-full min-h-screen flex bg-[#f5f5f5] overflow-x-hidden select-none">
@@ -140,6 +168,7 @@ const Login = () => {
           {/* GOOGLE BUTTON */}
           <button
             type="button"
+            onClick={() => window.location.href = 'http://127.0.0.1:8000/api/auth/google'}
             className="w-full h-11 bg-white border border-gray-300 hover:bg-gray-50 rounded-lg text-gray-700 font-bold text-xs flex items-center justify-center gap-3 transition-all shadow-sm active:scale-[0.98] uppercase tracking-wider"
           >
             <div className="bg-white rounded-full p-0.5 flex items-center justify-center">
