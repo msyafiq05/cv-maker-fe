@@ -1,235 +1,212 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import Navbar from '../components/navbar';
+import Footer from '../components/footer';
 
-// Data Dummy untuk Tabel (Sesuai Mockup Figma)
-const initialTemplates = [
-  { id: 1, name: 'CAHAYA', author: 'Admin User', date: '2026-02-00', status: 'Active', img: 'https://via.placeholder.com/40x55?text=CV1' },
-  { id: 2, name: 'KETUT SUSILO', author: 'Admin User', date: '2026-05-18', status: 'Active', img: 'https://via.placeholder.com/40x55?text=CV2' },
-  { id: 3, name: 'SAMIRA HADID', author: 'Admin User', date: '2026-03-22', status: 'Active', img: 'https://via.placeholder.com/40x55?text=CV3' },
-  { id: 4, name: 'SAMIRA HADID', author: 'Admin User', date: '2026-03-18', status: 'Active', img: 'https://via.placeholder.com/40x55?text=CV4' },
-  { id: 5, name: 'SAMIRA HADID', author: 'Admin User', date: '2026-03-16', status: 'Active', img: 'https://via.placeholder.com/40x55?text=CV5' },
+const initialUsers = [
+  { id: 1, name: 'User', email: 'Users@gmail.com', cvCount: 1, lastAccess: '1 hour ago', img: 'https://via.placeholder.com/40' },
 ];
 
 const AdminDashboard = () => {
-  const navigate = useNavigate();
-  const [templates, setTemplates] = useState(initialTemplates);
+  // Menggunakan state agar tabel dan data card otomatis singkron secara real-time saat dihapus
+  const [users, setUsers] = useState(initialUsers);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate('/login');
+  // 1. Fungsi Tombol Sampah Berfungsi (Menghapus Data Secara Real-time)
+  const handleDeleteUser = (id: number) => {
+    if (window.confirm('Apakah Anda yakin ingin menghapus user ini?')) {
+      const updatedUsers = users.filter((user) => user.id !== id);
+      setUsers(updatedUsers);
+    }
   };
 
+  // 2. Kalkulasi Otomatis Nyambung ke Backend / State (Otomatis berkurang/berubah jika user dihapus)
+  const totalRegistered = users.length;
+  const activeTemplates = 1; // Tinggal disesuaikan dengan jumlah data template dari backend nanti
+  const totalDownloads = users.reduce((sum, user) => sum + user.cvCount, 0); // Akumulasi dinamis dari jumlah CV user
+
+  // Filter untuk pencarian data user di tabel
+  const filteredUsers = users.filter((user) =>
+    user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    user.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
-    <div className="flex w-full min-h-screen bg-[#f3f9fd] font-sans antialiased select-none">
+    <div className="flex flex-col min-h-screen bg-white font-sans antialiased">
       
-      {/* ========================================================= */}
-      {/* 1. SIDEBAR (SISI KIRI)                                    */}
-      {/* ========================================================= */}
-      <aside className="w-[260px] bg-[#3fa2f6] flex flex-col justify-between text-white flex-shrink-0 sticky top-0 h-screen shadow-lg">
-        <div>
-          {/* Header Sidebar / Logo */}
-          <div className="p-6 flex items-center space-x-3 border-b border-blue-400/30">
-            <div className="w-8 h-8 bg-white/20 rounded flex items-center justify-center text-xl font-bold">📄</div>
-            <span className="text-xl font-extrabold tracking-wide">CV MAKER</span>
+      {/* 1. NAVBAR */}
+      <Navbar />
+
+      {/* 2. MAIN CONTENT AREA */}
+      <main className="flex-1 max-w-[1200px] w-full mx-auto px-8 py-16">
+        
+        {/* HEADING UTAMA DUA WARNA */}
+        <div className="mb-14">
+          <h1 className="text-[54px] font-bold leading-tight tracking-tight">
+            <span className="text-[#5DADE2]">Hello Admin !</span> 
+            <br />
+            <span className="text-[#4680B4]">CV Maker</span>
+          </h1>
+          <p className="text-gray-500 text-sm mt-3 font-normal tracking-wide">
+            Manage your CV Maker website
+          </p>
+        </div>
+
+        {/* SECTION 3 CARD OVERVIEW (Akurat Sesuai Ukuran Figma & Angka Warna #4A85BB) */}
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 max-w-[1000px]">
+          
+          {/* Card 1: Total Registered Users */}
+          <div className="bg-[#eaf5ff] border border-[#4a85bb]/30 rounded-xl pt-10 pb-8 px-6 flex flex-col items-center justify-between min-h-[340px] max-w-[280px] w-full mx-auto shadow-sm">
+            <div className="text-[#334155]">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-14 w-14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </div>
+            <h3 className="text-[20px] font-bold text-[#334155] text-center leading-tight mt-3">
+              Total Registered<br />Users
+            </h3>
+            {/* Angka Berwarna Biru Steel #4A85BB Sesuai Figma */}
+            <span className="text-[64px] font-bold text-[#4A85BB] tracking-tight leading-none my-2">
+              {totalRegistered}
+            </span>
+            <p className="text-xs font-bold text-[#475569] tracking-wide mt-1">Since Last Week</p>
           </div>
 
-          {/* Navigasi Menu */}
-          <nav className="mt-6 px-3 space-y-1">
-            <button className="w-full flex items-center space-x-3 bg-white/15 px-4 py-3 rounded-lg font-semibold transition-all">
-              <span>📊</span>
-              <span>Dashboard</span>
-            </button>
-            <button className="w-full flex items-center space-x-3 text-white/80 hover:bg-white/10 px-4 py-3 rounded-lg font-medium transition-all text-left">
-              <span>📁</span>
-              <span className="flex-1">Template Management</span>
-              <span className="text-xs bg-white/20 px-1.5 py-0.5 rounded">+</span>
-            </button>
-            <button className="w-full flex items-center space-x-3 text-white/80 hover:bg-white/10 px-4 py-3 rounded-lg font-medium transition-all text-left">
-              <span>👥</span>
-              <span>User Data</span>
-            </button>
-            <button className="w-full flex items-center space-x-3 text-white/80 hover:bg-white/10 px-4 py-3 rounded-lg font-medium transition-all text-left">
-              <span>📈</span>
-              <span>Download Analytics</span>
-            </button>
-          </nav>
-        </div>
+          {/* Card 2: Active CV Templates */}
+          <div className="bg-[#eaf5ff] border border-[#4a85bb]/30 rounded-xl pt-10 pb-8 px-6 flex flex-col items-center justify-between min-h-[340px] max-w-[280px] w-full mx-auto shadow-sm">
+            <div className="text-[#334155]">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-14 w-14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <h3 className="text-[20px] font-bold text-[#334155] text-center leading-tight mt-3">
+              Active CV<br />Templates
+            </h3>
+            {/* Angka Berwarna Biru Steel #4A85BB Sesuai Figma */}
+            <span className="text-[64px] font-bold text-[#4A85BB] tracking-tight leading-none my-2">
+              {activeTemplates}
+            </span>
+            <div className="h-4"></div> {/* Spacer balance */}
+          </div>
 
-        {/* Tombol Logout di Bawah Sidebar */}
-        <div className="p-4 border-t border-blue-400/30">
-          <button 
-            onClick={handleLogout}
-            className="w-full flex items-center space-x-3 text-white/90 hover:bg-red-500/20 px-4 py-3 rounded-lg font-semibold transition-all text-left"
-          >
-            <span>🚪</span>
-            <span>Logout</span>
-          </button>
-        </div>
-      </aside>
+          {/* Card 3: Total CV Downloads */}
+          <div className="bg-[#eaf5ff] border border-[#4a85bb]/30 rounded-xl pt-10 pb-8 px-6 flex flex-col items-center justify-between min-h-[340px] max-w-[280px] w-full mx-auto shadow-sm">
+            <div className="text-[#334155]">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-14 w-14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+            </div>
+            <h3 className="text-[20px] font-bold text-[#334155] text-center leading-tight mt-3">
+              Total CV<br />Downloads
+            </h3>
+            {/* Angka Berwarna Biru Steel #4A85BB Sesuai Figma */}
+            <span className="text-[64px] font-bold text-[#4A85BB] tracking-tight leading-none my-2">
+              {totalDownloads}
+            </span>
+            <div className="h-4"></div> {/* Spacer balance */}
+          </div>
 
-      {/* ========================================================= */}
-      {/* KONTEN KANAN (NAVBAR ATAS + MAIN CONTENT)                 */}
-      {/* ========================================================= */}
-      <div className="flex-1 flex flex-col overflow-x-hidden">
-        
-        {/* 2. TOP NAVBAR */}
-        <header className="h-[70px] bg-white border-b border-gray-100 px-8 flex items-center justify-between sticky top-0 z-10 shadow-sm">
-          <h1 className="text-xl font-bold text-gray-800">Welcome back, Admin!</h1>
-          
-          {/* Info Akun Admin di Kanan Atas */}
-          <div className="flex items-center space-x-3 cursor-pointer group">
-            <div className="w-10 h-10 rounded-full bg-gray-200 border-2 border-[#3fa2f6] overflow-hidden">
-              <img 
-                src="https://via.placeholder.com/40" 
-                alt="Admin Profile" 
-                className="w-full h-full object-cover"
+        </section>
+
+        {/* SECTION: USER MANAGEMENT TABLE */}
+        <section className="mt-16">
+          <div className="flex items-end justify-between mb-8">
+            <h2 className="text-[38px] font-bold text-[#4682B4] tracking-tight leading-none">
+              User Management
+            </h2>
+            
+            {/* Input Search Tipis Minimalis */}
+            <div className="relative">
+              <span className="absolute inset-y-0 left-3 flex items-center text-gray-400 text-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </span>
+              <input 
+                type="text" 
+                placeholder="Search" 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-[260px] pl-9 pr-4 py-1.5 border border-gray-300 rounded-md text-sm bg-white focus:outline-none focus:border-[#4682B4] placeholder-gray-400"
               />
             </div>
-            <div className="text-right">
-              <p className="text-sm font-bold text-gray-800 group-hover:text-[#3fa2f6] transition-colors">Admin User</p>
-              <p className="text-xs text-gray-400 font-medium">Super Admin</p>
-            </div>
-            <span className="text-xs text-gray-400 group-hover:translate-y-0.5 transition-transform">▼</span>
           </div>
-        </header>
 
-        {/* 3. CORE CONTENT AREA */}
-        <main className="p-8 space-y-8 flex-1 max-w-[1400px] w-full mx-auto">
-          
-          {/* SECTION: DASHBOARD OVERVIEW (4 CARD UTAMA) */}
-          <section>
-            <h2 className="text-xl font-bold text-gray-800 mb-4">Dashboard Overview</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              
-              {/* Card 1: Total Registered Users */}
-              <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center justify-center text-center">
-                <div className="w-12 h-12 bg-blue-50 text-[#3fa2f6] rounded-full flex items-center justify-center text-xl font-bold mb-3">👥</div>
-                <p className="text-xs font-bold text-gray-400 tracking-wide">Total Registered Users</p>
-                <h3 className="text-3xl font-black text-gray-800 mt-1">1,250</h3>
-                <p className="text-[11px] font-bold text-green-500 mt-1">+5% <span className="text-gray-400 font-medium">since last week</span></p>
-              </div>
+          {/* Render Tabel Data User */}
+          <div className="overflow-x-auto w-full">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b-[3px] border-[#D9D9D9] text-gray-800 text-base font-bold">
+                  <th className="py-3 px-2 pb-4 font-bold">
+                    <span className="inline-flex items-center gap-1.5">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                      User Name
+                    </span>
+                  </th>
+                  <th className="py-3 px-2 pb-4 font-bold">
+                    <span className="inline-flex items-center gap-1.5">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                      Email
+                    </span>
+                  </th>
+                  <th className="py-3 px-2 pb-4 font-bold text-center">
+                    <span className="inline-flex items-center gap-1.5 justify-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      CV dibuat
+                    </span>
+                  </th>
+                  <th className="py-3 px-2 pb-4 font-bold">
+                    <span className="inline-flex items-center gap-1.5">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      Terakhir Akses
+                    </span>
+                  </th>
+                  <th className="py-3 px-2 pb-4 font-bold text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="text-sm text-gray-700">
+                {filteredUsers.map((user) => (
+                  <tr key={user.id} className="align-middle border-b border-gray-100">
+                    <td className="py-5 px-2 flex items-center space-x-3">
+                      <img src={user.img} alt="avatar" className="w-8 h-8 rounded-full object-cover" />
+                      <span className="text-gray-800 font-medium">{user.name}</span>
+                    </td>
+                    <td className="py-5 px-2 text-gray-600">{user.email}</td>
+                    <td className="py-5 px-2 text-center text-gray-800 font-medium">{user.cvCount}</td>
+                    <td className="py-5 px-2 text-gray-500 font-light">{user.lastAccess}</td>
+                    <td className="py-5 px-2 text-center">
+                      
+                      {/* FUNGSIONAL: Menghubungkan klik tombol ke fungsi handleDeleteUser */}
+                      <button 
+                        onClick={() => handleDeleteUser(user.id)}
+                        className="text-red-500 hover:text-red-700 transition-colors p-1" 
+                        title="Delete User"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
 
-              {/* Card 2: Active CV Templates */}
-              <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center justify-center text-center">
-                <div className="w-12 h-12 bg-blue-50 text-[#3fa2f6] rounded-full flex items-center justify-center text-xl font-bold mb-3">📄</div>
-                <p className="text-xs font-bold text-gray-400 tracking-wide">Active CV Templates</p>
-                <h3 className="text-3xl font-black text-[#3fa2f6] mt-1">{templates.length}</h3>
-              </div>
-
-              {/* Card 3: Total CV Downloads */}
-              <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center justify-center text-center">
-                <div className="w-12 h-12 bg-blue-50 text-[#3fa2f6] rounded-full flex items-center justify-center text-xl font-bold mb-3">📥</div>
-                <p className="text-xs font-bold text-gray-400 tracking-wide">Total CV Downloads</p>
-                <h3 className="text-3xl font-black text-gray-800 mt-1">3,410</h3>
-              </div>
-
-              {/* Card 4: CV Formats Graph Placeholder */}
-              <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center justify-center text-center">
-                <p className="text-xs font-bold text-gray-400 tracking-wide mb-2">CV Formats (PDF/PNG/JPG)</p>
-                {/* Donut Chart Simulation */}
-                <div className="relative w-16 h-16 rounded-full border-[6px] border-blue-400 border-t-[#3fa2f6] border-r-blue-200 animate-spin-slow flex items-center justify-center">
-                  <div className="w-8 h-8 rounded-full bg-white"></div>
-                </div>
-              </div>
-
-            </div>
-          </section>
-
-          {/* TWO COLUMN GRID BELOW OVERVIEW */}
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 items-start">
-            
-            {/* COLUMN KIRI & TENGAH: TABEL RECENT ACTIVITY */}
-            <section className="xl:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-              <div className="p-6 flex items-center justify-between border-b border-gray-50">
-                <h2 className="text-lg font-bold text-gray-800">Recent Template Activity</h2>
-                <button className="bg-[#3fa2f6] hover:bg-blue-600 text-white font-bold text-xs px-4 py-2.5 rounded-lg shadow-md shadow-blue-100 transition-all flex items-center space-x-1">
-                  <span>+</span> <span>Create New Template</span>
-                </button>
-              </div>
-
-              {/* RENDER TABEL */}
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="bg-gray-50/70 text-gray-400 uppercase text-[11px] font-bold tracking-wider border-b border-gray-100">
-                      <th className="py-3 px-6">Template Name</th>
-                      <th className="py-3 px-4 text-center">Preview</th>
-                      <th className="py-3 px-4">Author</th>
-                      <th className="py-3 px-4">Created Date</th>
-                      <th className="py-3 px-4">Status</th>
-                      <th className="py-3 px-6 text-center">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-100 text-sm text-gray-700">
-                    {templates.map((tpl) => (
-                      <tr key={tpl.id} className="hover:bg-gray-50/50 transition-colors">
-                        <td className="py-4 px-6 font-bold text-gray-800">{tpl.name}</td>
-                        <td className="py-2 px-4">
-                          <div className="w-9 h-12 mx-auto border border-gray-200 rounded overflow-hidden shadow-sm bg-gray-50">
-                            <img src={tpl.img} alt="preview" className="w-full h-full object-cover" />
-                          </div>
-                        </td>
-                        <td className="py-4 px-4 text-gray-500 font-medium">{tpl.author}</td>
-                        <td className="py-4 px-4 text-gray-400 font-mono text-xs">{tpl.date}</td>
-                        <td className="py-4 px-4">
-                          <span className="px-2.5 py-1 bg-green-50 border border-green-200 text-green-600 rounded-md text-xs font-semibold">
-                            {tpl.status}
-                          </span>
-                        </td>
-                        <td className="py-4 px-6 text-center">
-                          <div className="flex items-center justify-center space-x-2 text-gray-400">
-                            <button className="hover:text-blue-500 p-1 transition-colors" title="View">👁️</button>
-                            <button className="hover:text-yellow-500 p-1 transition-colors" title="Edit">✏️</button>
-                            <button className="hover:text-red-500 p-1 transition-colors" title="Delete">🗑️</button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-
-            {/* COLUMN KANAN: SYSTEM LOGS */}
-            <section className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between">
-              <div>
-                <h2 className="text-lg font-bold text-gray-800 mb-4">System Logs</h2>
-                <div className="space-y-4">
-                  
-                  {/* Log Item 1 */}
-                  <div className="flex items-start space-x-3 p-3 rounded-xl hover:bg-gray-50 transition-colors">
-                    <div className="text-xl mt-0.5">🔔</div>
-                    <div>
-                      <p className="text-sm font-bold text-gray-700">Recent Activity</p>
-                      <p className="text-xs text-gray-400 font-medium">Admin User at 9:51 AM</p>
-                    </div>
-                  </div>
-
-                  {/* Log Item 2 */}
-                  <div className="flex items-start space-x-3 p-3 rounded-xl hover:bg-gray-50 transition-colors">
-                    <div className="text-xl mt-0.5">🔔</div>
-                    <div>
-                      <p className="text-sm font-bold text-gray-700">Recent Activity</p>
-                      <p className="text-xs text-gray-400 font-medium">Admin User at 8:57 PM</p>
-                    </div>
-                  </div>
-
-                  {/* Log Item 3 */}
-                  <div className="flex items-start space-x-3 p-3 rounded-xl hover:bg-gray-50 transition-colors">
-                    <div className="text-xl mt-0.5">🔔</div>
-                    <div>
-                      <p className="text-sm font-bold text-gray-700">Recent Activity</p>
-                      <p className="text-xs text-gray-400 font-medium">Admin User at 9:51 PM</p>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </section>
-
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        </main>
-      </div>
+        </section>
+
+      </main>
+
+      {/* 3. FOOTER */}
+      <Footer />
+
     </div>
   );
 };
