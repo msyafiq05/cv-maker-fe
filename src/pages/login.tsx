@@ -23,6 +23,9 @@ const Login = () => {
         // =========================================================
         // BAGIAN PENAMBAHAN UNTUK MENYAMBUNGKAN KE HALAMAN ADMIN
         // =========================================================
+        // Menyimpan flag status login agar singkron dengan Navbar.tsx
+        localStorage.setItem('isLoggedIn', 'true');
+
         if (res.user && res.user.role === 'admin') {
           navigate('/admin/dashboard');
         } else {
@@ -41,8 +44,6 @@ const Login = () => {
       setErrorMsg('Mohon isi email dan password!');
     }
   };
-
-
 
   return (
     <div className="w-full min-h-screen flex bg-[#f5f5f5] overflow-x-hidden select-none">
@@ -141,8 +142,6 @@ const Login = () => {
               {loading ? 'Memproses...' : 'Login'}
             </button>
           </form>
-
-
 
           {/* REGISTER */}
           <p className="text-center mt-5 text-gray-500 text-xs font-semibold">

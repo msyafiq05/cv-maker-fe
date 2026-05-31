@@ -60,16 +60,27 @@ const Navbar = () => {
 
           {isLoggedIn ? (
             <div className="flex items-center">
+              {/* PENYESUAIAN AREA PROFIL SESUAI MOCKUP FIGMA */}
               <div onClick={() => navigate('/profile')} className="flex items-center gap-3 cursor-pointer group transition">
-                <div className="w-10 h-10 bg-white rounded-full border-2 border-sky-300 overflow-hidden group-hover:border-white transition shadow-sm flex items-center justify-center">
-                  {/* Tampilkan inisial nama jika tidak ada avatar */}
+                <div className="w-10 h-10 bg-white rounded-full border-2 border-sky-300 overflow-hidden group-hover:border-white transition shadow-sm flex items-center justify-center shrink-0">
+                  {/* Menampilkan avatar berupa inisial huruf dari user yang sedang login */}
                   <span className="text-sky-500 font-bold text-sm">
                     {user?.nama ? user.nama.charAt(0).toUpperCase() : 'U'}
                   </span>
                 </div>
-
+                
+                {/* Text Nama & Role (Muncul Otomatis Samping Kanan Bulatan Profil) */}
+                <div className="flex flex-col text-left leading-none pr-1">
+                  <span className="text-sm font-bold text-slate-800 group-hover:text-slate-900 transition-colors">
+                    {user?.nama || 'Admin'}
+                  </span>
+                  <span className="text-[10px] text-slate-600 font-medium mt-0.5">
+                    {user?.role || 'Admin'}
+                  </span>
+                </div>
               </div>
-              <span onClick={handleLogout} className="ml-6 cursor-pointer text-xs font-bold bg-white px-4 py-2 rounded-full hover:bg-white transition text-black">
+
+              <span onClick={handleLogout} className="ml-6 cursor-pointer text-xs font-bold bg-white px-4 py-2 rounded-full hover:bg-slate-50 transition text-black shadow-sm">
                 Logout
               </span>
             </div>
@@ -82,7 +93,7 @@ const Navbar = () => {
             </button>
           )}
         </div>
-      </div>
+      </div> 
     </nav>
   );
 };
