@@ -32,6 +32,13 @@ const Profile = () => {
   const [error, setError]       = useState('');
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError('Anda belum login. Silakan login terlebih dahulu.');
+      setFetching(false);
+      return;
+    }
+
     profileApi.get()
       .then((res) => {
         const u = res.data ?? res;
@@ -49,7 +56,10 @@ const Profile = () => {
           password_confirmation: '',
         });
       })
-      .catch(() => {/* pakai data lokal jika gagal */})
+      .catch((err) => {
+        console.error('Error fetching profile:', err);
+        setError(err?.message ?? 'Gagal mengambil data profil.');
+      })
       .finally(() => setFetching(false));
   }, []);
 
