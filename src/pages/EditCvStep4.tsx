@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCvEdit, type Organization } from '../context/CvEditContext';
 import { CvPreview } from '../components/CvPreview';
 import { InputField, TextAreaField } from '../components/CvFields';
+import { organizationApi } from '../services/api';
 
 const TrashIcon = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>;
 const PlusIcon = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>;
 
 const EditCvStep4: React.FC = () => {
   const navigate = useNavigate();
-  const { organizations, setOrganizations } = useCvEdit();
+  const { organizations, setOrganizations, projectId } = useCvEdit();
+  const [saving, setSaving] = useState(false);
 
   const handleDynamicChange = (index: number, field: keyof Organization, value: string) => {
     setOrganizations((prev) => {
@@ -34,8 +36,40 @@ const EditCvStep4: React.FC = () => {
     setOrganizations((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleNext = () => {
-    navigate('/edit/step5');
+  const handleNext = async () => {
+    if (!projectId) {
+      alert('Project belum dibuat. Kembali ke Step 1 terlebih dahulu.');
+      navigate('/edit/step1');
+      return;
+    }
+    setSaving(true);
+    try {
+      // Delete existing organizations
+      const existing = await organizationApi.getAll(projectId);
+      if (existing.data && existing.data.length > 0) {
+        for (const item of existing.data) {
+          await organizationApi.delete(projectId, item.id);
+        }
+      }
+      // Create new ones
+      const valid = organizations.filter(org => org.orgName || org.role);
+      for (const org of valid) {
+        await organizationApi.create(projectId, {
+          organization_name: org.orgName || '',
+          role: org.role || '',
+          start_year: org.startYear || '',
+          end_year: org.endYear || '',
+          location: org.location || '',
+          description: org.description || ''
+        });
+      }
+      navigate('/edit/step5');
+    } catch (err: any) {
+      console.error('Error saving organizations:', err);
+      alert('Gagal menyimpan data. Pastikan kamu sudah login.');
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleBack = () => {
@@ -136,9 +170,10 @@ const EditCvStep4: React.FC = () => {
             </button>
             <button 
               onClick={handleNext} 
-              className="grow py-3.5 bg-[#5BBAED] text-white font-bold rounded-lg shadow-md hover:bg-sky-400 transition text-sm active:scale-95"
+              disabled={saving}
+              className="grow py-3.5 bg-[#5BBAED] text-white font-bold rounded-lg shadow-md hover:bg-sky-400 transition text-sm active:scale-95 disabled:opacity-75 flex items-center justify-center gap-2"
             >
-              SAVE & CONTINUE
+              {saving ? 'MENYIMPAN...' : 'SAVE & CONTINUE'}
             </button>
           </div>
         </div>

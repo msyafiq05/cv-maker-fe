@@ -1,7 +1,4 @@
-// ============================================================
-// api.ts — Central API service untuk CV Maker
-// Semua request ke Laravel backend dilakukan dari sini.
-// ============================================================
+// request ke backend
 
 const BASE_URL = 'http://127.0.0.1:8000/api';
 
@@ -149,6 +146,12 @@ export const projectApi = {
       method: 'DELETE',
       headers: headers(),
     }).then(handleResponse),
+
+  incrementDownload: (id: number) =>
+    fetch(`${BASE_URL}/cv-projects/${id}/download`, {
+      method: 'POST',
+      headers: headers(),
+    }).then(handleResponse),
 };
 
 // ================================================================
@@ -288,6 +291,26 @@ export const organizationApi = {
 
   delete: (projectId: number, id: number) =>
     fetch(`${BASE_URL}/cv-projects/${projectId}/organizations/${id}`, {
+      method: 'DELETE',
+      headers: headers(),
+    }).then(handleResponse),
+};
+
+// ================================================================
+// ADMIN
+// ================================================================
+
+export const adminApi = {
+  getDashboardStats: () =>
+    fetch(`${BASE_URL}/admin/dashboard-stats`, { headers: headers() }).then(handleResponse),
+
+  getUsers: (search?: string) => {
+    const query = search ? `?search=${encodeURIComponent(search)}` : '';
+    return fetch(`${BASE_URL}/admin/users${query}`, { headers: headers() }).then(handleResponse);
+  },
+
+  deleteUser: (id: number) =>
+    fetch(`${BASE_URL}/admin/users/${id}`, {
       method: 'DELETE',
       headers: headers(),
     }).then(handleResponse),

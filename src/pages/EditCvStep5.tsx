@@ -5,10 +5,6 @@ import { CvPreview } from '../components/CvPreview';
 import { InputField, TextAreaField } from '../components/CvFields';
 import { 
   projectApi,
-  personalDetailApi,
-  employmentApi,
-  educationApi,
-  organizationApi,
   skillApi 
 } from '../services/api';
 
@@ -22,9 +18,6 @@ const EditCvStep5: React.FC = () => {
     skills, 
     setSkills,
     profile,
-    experiences,
-    educations,
-    organizations,
     projectId,
     setProjectId 
   } = useCvEdit();
@@ -60,7 +53,7 @@ const EditCvStep5: React.FC = () => {
       // Step A: If no projectId in context, create a new project in backend
       if (!projectId) {
         const title = profile.fullName ? `CV ${profile.fullName}` : 'Untitled Resume';
-        const createRes = await projectApi.create({ judul_cv: title, template_id: 2 });
+        const createRes = await projectApi.create({ judul_cv: title });
         if (createRes.data && createRes.data.id) {
           activePid = createRes.data.id;
           setProjectId(activePid);
@@ -74,80 +67,7 @@ const EditCvStep5: React.FC = () => {
         await projectApi.update(activePid, { judul_cv: title });
       }
 
-      // Step B: Save Personal Detail (upsert)
-      await personalDetailApi.upsert(activePid, {
-        full_name: profile.fullName || '',
-        phone_number: profile.phone || '',
-        email_address: profile.email || '',
-        place_of_birth: profile.placeOfBirth || '',
-        date_of_birth: profile.dateOfBirth || '',
-        address: profile.address || '',
-        website_url: profile.website || '',
-        short_description: profile.description || '',
-        foto_profil: profile.photoUrl || ''
-      });
-
-      // Step C: Sync Employment History
-      // 1. Get existing employment history
-      const existingEmps = await employmentApi.getAll(activePid);
-      if (existingEmps.data && existingEmps.data.length > 0) {
-        // 2. Delete all existing ones
-        for (const item of existingEmps.data) {
-          await employmentApi.delete(activePid, item.id);
-        }
-      }
-      // 3. Create new ones (excluding completely empty records)
-      const validExperiences = experiences.filter(exp => exp.companyName || exp.role);
-      for (const exp of validExperiences) {
-        await employmentApi.create(activePid, {
-          company_name: exp.companyName || '',
-          job_title: exp.role || '',
-          start_year: exp.startYear || '',
-          end_year: exp.endYear || '',
-          company_location: exp.location || '',
-          company_description: exp.description || ''
-        });
-      }
-
-      // Step D: Sync Educations
-      const existingEdus = await educationApi.getAll(activePid);
-      if (existingEdus.data && existingEdus.data.length > 0) {
-        for (const item of existingEdus.data) {
-          await educationApi.delete(activePid, item.id);
-        }
-      }
-      const validEducations = educations.filter(edu => edu.schoolName || edu.level);
-      for (const edu of validEducations) {
-        await educationApi.create(activePid, {
-          institution_name: edu.schoolName || '',
-          degree: edu.level || '',
-          field_of_study: '',
-          start_year: edu.startYear || '',
-          end_year: edu.endYear || '',
-          description: edu.description || ''
-        });
-      }
-
-      // Step E: Sync Organizations
-      const existingOrgs = await organizationApi.getAll(activePid);
-      if (existingOrgs.data && existingOrgs.data.length > 0) {
-        for (const item of existingOrgs.data) {
-          await organizationApi.delete(activePid, item.id);
-        }
-      }
-      const validOrgs = organizations.filter(org => org.orgName || org.role);
-      for (const org of validOrgs) {
-        await organizationApi.create(activePid, {
-          organization_name: org.orgName || '',
-          role: org.role || '',
-          start_year: org.startYear || '',
-          end_year: org.endYear || '',
-          location: org.location || '',
-          description: org.description || ''
-        });
-      }
-
-      // Step F: Sync Skills
+      // Step B: Sync Skills
       const existingSkills = await skillApi.getAll(activePid);
       if (existingSkills.data && existingSkills.data.length > 0) {
         for (const item of existingSkills.data) {
@@ -162,6 +82,8 @@ const EditCvStep5: React.FC = () => {
           elaboration: sk.elaboration || ''
         });
       }
+
+
 
       alert('CV berhasil disimpan ke database!');
       navigate('/edit/download');

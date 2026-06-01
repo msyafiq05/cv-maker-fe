@@ -57,6 +57,9 @@ const Navbar = () => {
           <span onClick={handleAboutUsClick} className="cursor-pointer hover:text-slate-900 transition">About us</span>
           <span onClick={handleTemplateClick} className="cursor-pointer hover:text-slate-900 transition">Template</span>
           <Link to="/project" className="hover:text-slate-900 transition">Project</Link>
+          {isLoggedIn && user?.role === 'admin' && (
+            <Link to="/Admin/Dashboard" className="hover:text-slate-900 transition">Dashboard</Link>
+          )}
 
           {isLoggedIn ? (
             <div className="flex items-center">
@@ -68,7 +71,7 @@ const Navbar = () => {
                     {user?.nama ? user.nama.charAt(0).toUpperCase() : 'U'}
                   </span>
                 </div>
-                
+
                 {/* Text Nama & Role (Muncul Otomatis Samping Kanan Bulatan Profil) */}
                 <div className="flex flex-col text-left leading-none pr-1">
                   <span className="text-sm font-bold text-slate-800 group-hover:text-slate-900 transition-colors">
@@ -93,7 +96,7 @@ const Navbar = () => {
             </button>
           )}
         </div>
-      </div> 
+      </div>
     </nav>
   );
 };

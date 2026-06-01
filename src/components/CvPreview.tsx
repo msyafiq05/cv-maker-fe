@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useCvEdit } from '../context/CvEditContext';
 import html2canvas from 'html2canvas-pro';
 import { jsPDF } from 'jspdf';
+import { projectApi } from '../services/api';
 
 
 export const CvPreview: React.FC = () => {
@@ -20,7 +21,8 @@ export const CvPreview: React.FC = () => {
     headerStyle,
     setHeaderStyle,
     alignment,
-    setAlignment
+    setAlignment,
+    projectId
   } = useCvEdit();
 
   const [showDownloadModal, setShowDownloadModal] = useState(false);
@@ -33,6 +35,12 @@ export const CvPreview: React.FC = () => {
   const [showSpacingDropdown, setShowSpacingDropdown] = useState(false);
   const [showHeaderDropdown, setShowHeaderDropdown] = useState(false);
   const [showAlignDropdown, setShowAlignDropdown] = useState(false);
+
+  const incrementIfPossible = () => {
+    if (projectId) {
+      projectApi.incrementDownload(projectId).catch(err => console.error("Failed to increment download count", err));
+    }
+  };
 
   const downloadPDF = () => {
     const element = document.getElementById('cv-paper');
@@ -73,6 +81,7 @@ export const CvPreview: React.FC = () => {
         }
         
         pdf.save(finalFileName);
+        incrementIfPossible();
         setShowDownloadModal(false);
       }).catch((err: any) => {
         console.error('Error generating PDF:', err);
@@ -91,6 +100,7 @@ export const CvPreview: React.FC = () => {
         link.href = dataUrl;
         link.download = finalFileName;
         link.click();
+        incrementIfPossible();
         setShowDownloadModal(false);
       }).catch((err: any) => {
         console.error('Error generating image:', err);

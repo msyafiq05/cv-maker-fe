@@ -4,6 +4,7 @@ import { useCvEdit } from '../context/CvEditContext';
 import { CvPreview } from '../components/CvPreview';
 import { InputField, TextAreaField } from '../components/CvFields';
 import { 
+  projectApi,
   personalDetailApi, 
   employmentApi, 
   educationApi, 
@@ -28,6 +29,7 @@ const EditCvStep1: React.FC = () => {
     setLineHeight,
     setHeaderStyle,
     setAlignment,
+    projectId,
     setProjectId
   } = useCvEdit();
 
@@ -335,8 +337,45 @@ const EditCvStep1: React.FC = () => {
     }
   };
 
-  const handleNext = () => {
-    navigate('/edit/step2');
+  const [saving, setSaving] = useState(false);
+
+  const handleNext = async () => {
+    setSaving(true);
+    try {
+      let activePid = projectId;
+
+      // Create project if none exists
+      if (!activePid) {
+        const title = profile.fullName ? `CV ${profile.fullName}` : 'Untitled Resume';
+        const createRes = await projectApi.create({ judul_cv: title });
+        if (createRes.data && createRes.data.id) {
+          activePid = createRes.data.id;
+          setProjectId(activePid);
+        } else {
+          throw new Error('Gagal membuat project baru.');
+        }
+      }
+
+      // Save personal detail
+      await personalDetailApi.upsert(activePid!, {
+        full_name: profile.fullName || '',
+        phone_number: profile.phone || '',
+        email_address: profile.email || '',
+        place_of_birth: profile.placeOfBirth || '',
+        date_of_birth: profile.dateOfBirth || '',
+        address: profile.address || '',
+        website_url: profile.website || '',
+        short_description: profile.description || '',
+        foto_profil: profile.photoUrl || ''
+      });
+
+      navigate('/edit/step2');
+    } catch (err: any) {
+      console.error('Error saving personal detail:', err);
+      alert('Gagal menyimpan data. Pastikan kamu sudah login.');
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleCancel = () => {
@@ -474,9 +513,10 @@ const EditCvStep1: React.FC = () => {
             </button>
             <button 
               onClick={handleNext} 
-              className="grow py-3.5 bg-[#5BBAED] text-white font-bold rounded-lg shadow-md hover:bg-sky-400 transition text-sm active:scale-95"
+              disabled={saving}
+              className="grow py-3.5 bg-[#5BBAED] text-white font-bold rounded-lg shadow-md hover:bg-sky-400 transition text-sm active:scale-95 disabled:opacity-75 flex items-center justify-center gap-2"
             >
-              SAVE & CONTINUE
+              {saving ? 'MENYIMPAN...' : 'SAVE & CONTINUE'}
             </button>
           </div>
         </div>
