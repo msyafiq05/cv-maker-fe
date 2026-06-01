@@ -34,9 +34,10 @@ const Login = () => {
         // =========================================================
 
         window.location.reload();
-      } catch (err: any) {
-        console.error('Error login:', err);
-        setErrorMsg(err?.message ?? 'Email atau Password salah!');
+      } catch (err: unknown) {
+        const e = err as { message?: string };
+        console.error('Error login:', e);
+        setErrorMsg(e?.message ?? 'Email atau Password salah!');
       } finally {
         setLoading(false);
       }

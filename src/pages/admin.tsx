@@ -52,6 +52,7 @@ const AdminDashboard = () => {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchDashboardData();
   }, []);
 
@@ -130,9 +131,10 @@ const AdminDashboard = () => {
 
         alert('User added successfully!');
       }
-    } catch (error: any) {
-      console.error('Error adding user:', error);
-      alert(error?.message || 'Failed to add user');
+    } catch (error: unknown) {
+      const e = error as { message?: string };
+      console.error('Error adding user:', e);
+      alert(e?.message || 'Failed to add user');
     } finally {
       setIsSubmitting(false);
     }
