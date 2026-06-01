@@ -64,7 +64,7 @@ const EditCvStep4: React.FC = () => {
         });
       }
       navigate('/edit/step5');
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error saving organizations:', err);
       alert('Gagal menyimpan data. Pastikan kamu sudah login.');
     } finally {

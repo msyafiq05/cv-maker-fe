@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-// @ts-ignore
 import BlackWhiteTemplates from '../components/templates/BlackWhiteTemplates';
 
 const Templates = () => {

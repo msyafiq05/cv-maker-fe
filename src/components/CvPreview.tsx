@@ -83,9 +83,10 @@ export const CvPreview: React.FC = () => {
         pdf.save(finalFileName);
         incrementIfPossible();
         setShowDownloadModal(false);
-      }).catch((err: any) => {
-        console.error('Error generating PDF:', err);
-        alert('Gagal mendownload PDF: ' + (err.message || err));
+      }).catch((err: unknown) => {
+        const e = err as { message?: string };
+        console.error('Error generating PDF:', e);
+        alert('Gagal mendownload PDF: ' + (e?.message || e));
         setShowDownloadModal(false);
       });
     } else {
@@ -102,9 +103,10 @@ export const CvPreview: React.FC = () => {
         link.click();
         incrementIfPossible();
         setShowDownloadModal(false);
-      }).catch((err: any) => {
-        console.error('Error generating image:', err);
-        alert('Gagal mendownload gambar: ' + (err.message || err));
+      }).catch((err: unknown) => {
+        const e = err as { message?: string };
+        console.error('Error generating image:', e);
+        alert('Gagal mendownload gambar: ' + (e?.message || e));
         setShowDownloadModal(false);
       });
     }

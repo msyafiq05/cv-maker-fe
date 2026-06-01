@@ -34,6 +34,7 @@ const Profile = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setError('Anda belum login. Silakan login terlebih dahulu.');
       setFetching(false);
       return;
@@ -119,9 +120,10 @@ const Profile = () => {
 
       setSuccess('Profil berhasil diperbarui!');
       setUserData(prev => ({ ...prev, password: '', password_confirmation: '' }));
-    } catch (err: any) {
-      const firstError = err?.errors ? Object.values(err.errors)[0] as string : null;
-      setError(firstError ?? err?.message ?? 'Gagal memperbarui profil.');
+    } catch (err: unknown) {
+      const e = err as { errors?: Record<string, string>; message?: string };
+      const firstError = e?.errors ? Object.values(e.errors)[0] : null;
+      setError(firstError ?? e?.message ?? 'Gagal memperbarui profil.');
     } finally {
       setLoading(false);
     }

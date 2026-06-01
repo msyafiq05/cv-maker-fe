@@ -64,7 +64,7 @@ const EditCvStep2: React.FC = () => {
         });
       }
       navigate('/edit/step3');
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error saving employment:', err);
       alert('Gagal menyimpan data. Pastikan kamu sudah login.');
     } finally {

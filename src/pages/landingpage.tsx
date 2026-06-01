@@ -2,7 +2,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import landingPageImg from '../assets/landingpage.png';
 import landingPage2Img from '../assets/landingpage2.png';
-// @ts-ignore
 import BlackWhiteTemplates from '../components/templates/BlackWhiteTemplates';
 
 const LandingPage = () => {

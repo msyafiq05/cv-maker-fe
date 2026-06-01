@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 export interface Profile {
@@ -83,7 +84,7 @@ const CvEditContext = createContext<CvEditContextType | undefined>(undefined);
 
 export const CvEditProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Load initial values from localStorage or default
-  const getSaved = (key: string, defaultVal: any) => {
+  const getSaved = <T,>(key: string, defaultVal: T): T => {
     const saved = localStorage.getItem(key);
     try {
       return saved ? JSON.parse(saved) : defaultVal;

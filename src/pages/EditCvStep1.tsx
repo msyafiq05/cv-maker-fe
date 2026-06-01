@@ -60,6 +60,7 @@ const EditCvStep1: React.FC = () => {
       // Load employment history
       employmentApi.getAll(pid).then((res) => {
         if (res.data && res.data.length > 0) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           setExperiences(res.data.map((item: any) => ({
             id: item.id.toString(),
             companyName: item.company_name || '',
@@ -77,6 +78,7 @@ const EditCvStep1: React.FC = () => {
       // Load educations
       educationApi.getAll(pid).then((res) => {
         if (res.data && res.data.length > 0) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           setEducations(res.data.map((item: any) => ({
             id: item.id.toString(),
             schoolName: item.institution_name || '',
@@ -95,6 +97,7 @@ const EditCvStep1: React.FC = () => {
       // Load organizations
       organizationApi.getAll(pid).then((res) => {
         if (res.data && res.data.length > 0) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           setOrganizations(res.data.map((item: any) => ({
             id: item.id.toString(),
             orgName: item.organization_name || '',
@@ -112,6 +115,7 @@ const EditCvStep1: React.FC = () => {
       // Load skills
       skillApi.getAll(pid).then((res) => {
         if (res.data && res.data.length > 0) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           setSkills(res.data.map((item: any) => ({
             id: item.id.toString(),
             category: item.activity_name || '',
@@ -242,6 +246,7 @@ const EditCvStep1: React.FC = () => {
       // Clear navigation state to avoid re-triggering on back/forward
       navigate(location.pathname, { replace: true, state: {} });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.state, navigate]);
 
   // Photo Crop States
@@ -370,7 +375,7 @@ const EditCvStep1: React.FC = () => {
       });
 
       navigate('/edit/step2');
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error saving personal detail:', err);
       alert('Gagal menyimpan data. Pastikan kamu sudah login.');
     } finally {

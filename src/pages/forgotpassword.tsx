@@ -39,8 +39,9 @@ const ForgotPassword = () => {
       // Backend mengembalikan reset_token (di production dikirim via email)
       setSuccess('Kode OTP / Token telah dikirim. Silakan cek email Anda.');
       setStep(2);
-    } catch (err: any) {
-      setError(err?.message ?? 'Email tidak ditemukan atau terjadi kesalahan.');
+    } catch (err: unknown) {
+      const e = err as { message?: string };
+      setError(e?.message ?? 'Email tidak ditemukan atau terjadi kesalahan.');
     } finally {
       setLoading(false);
     }
@@ -100,8 +101,9 @@ const ForgotPassword = () => {
       });
       setSuccess('Password berhasil direset!');
       setStep(4); // Pindah ke halaman Success
-    } catch (err: any) {
-      setError(err?.message ?? 'Token / OTP tidak valid atau sudah kadaluarsa.');
+    } catch (err: unknown) {
+      const e = err as { message?: string };
+      setError(e?.message ?? 'Token / OTP tidak valid atau sudah kadaluarsa.');
     } finally {
       setLoading(false);
     }

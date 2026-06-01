@@ -45,11 +45,12 @@ const Signup = () => {
       });
 
       setIsSuccess(true);
-    } catch (err: any) {
-      const firstError = err?.errors
-        ? (Object.values(err.errors)[0] as string[]).join(', ')
+    } catch (err: unknown) {
+      const e = err as { errors?: Record<string, string[]>; message?: string };
+      const firstError = e?.errors
+        ? (Object.values(e.errors)[0] as string[]).join(', ')
         : null;
-      setError(firstError ?? err?.message ?? 'Registrasi gagal.');
+      setError(firstError ?? e?.message ?? 'Registrasi gagal.');
     } finally {
       setLoading(false);
     }
