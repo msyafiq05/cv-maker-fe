@@ -98,7 +98,7 @@ const EditCvStep5: React.FC = () => {
 
 
 
-      alert('CV berhasil disimpan ke database!');
+      alert('CV berhasil disimpan');
       navigate('/edit/download');
     } catch (err: any) {
       console.error("Error saving CV to database:", err);
