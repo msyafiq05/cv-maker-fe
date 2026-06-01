@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useCvEdit } from '../context/CvEditContext';
 import html2canvas from 'html2canvas-pro';
-import { jsPDF } from 'jspdf';
+// @ts-ignore
+import html2pdf from 'html2pdf.js';
 import { projectApi } from '../services/api';
 
 
@@ -42,71 +43,81 @@ export const CvPreview: React.FC = () => {
     }
   };
 
-  const downloadPDF = () => {
+  const downloadPDF = async () => {
     const element = document.getElementById('cv-paper');
+    const scrollContainer = document.getElementById('cv-scroll-container');
     if (!element) return;
     const finalFileName = fileName ? `${fileName}.${fileType}` : `CV_${profile.fullName.replace(/\s/g, '_') || 'Untitled'}.${fileType}`;
     
-    if (fileType === 'pdf') {
-      html2canvas(element, {
-        scale: 2,
-        useCORS: true,
-        logging: false
-      }).then((canvas) => {
-        const imgData = canvas.toDataURL('image/jpeg', 0.98);
-        
-        const pdfWidth = 210; // A4 width in mm
-        const pdfPageHeight = 297; // A4 height in mm
-        const imgHeightInPdf = pdfWidth * (canvas.height / canvas.width);
-        
-        const pdf = new jsPDF({
-          orientation: 'portrait',
-          unit: 'mm',
-          format: 'a4'
+    // Save current scroll positions
+    const prevScrollTop = scrollContainer?.scrollTop || 0;
+    const prevWindowScrollY = window.scrollY;
+
+    // Temporarily scroll to top so html2canvas/html2pdf doesn't cut off scrolled content
+    if (scrollContainer) {
+      scrollContainer.scrollTop = 0;
+    }
+    window.scrollTo(0, 0);
+
+    // Temporarily remove scroll constraints so captures run properly
+    const prevOverflow = scrollContainer?.style.overflow || '';
+    const prevMaxHeight = scrollContainer?.style.maxHeight || '';
+    const prevHeight = scrollContainer?.style.height || '';
+    if (scrollContainer) {
+      scrollContainer.style.overflow = 'visible';
+      scrollContainer.style.maxHeight = 'none';
+      scrollContainer.style.height = 'auto';
+    }
+
+    try {
+      if (fileType === 'pdf') {
+        const opt = {
+          margin:       0,
+          filename:     finalFileName,
+          image:        { type: 'jpeg', quality: 0.98 },
+          html2canvas:  { 
+            scale: 2, 
+            useCORS: true,
+            logging: false,
+            scrollX: 0,
+            scrollY: 0
+          },
+          jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+          pagebreak:    { mode: ['css', 'legacy'] }
+        };
+        // @ts-ignore
+        await html2pdf().set(opt).from(element).save();
+      } else {
+        const canvas = await html2canvas(element, {
+          scale: 2,
+          useCORS: true,
+          logging: false,
+          scrollX: 0,
+          scrollY: 0
         });
-        
-        let heightLeft = imgHeightInPdf;
-        let position = 0;
-        
-        // Page 1
-        pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, imgHeightInPdf);
-        heightLeft -= pdfPageHeight;
-        
-        // Additional pages if the content spans more than one A4 height
-        while (heightLeft > 0) {
-          position = heightLeft - imgHeightInPdf;
-          pdf.addPage();
-          pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, imgHeightInPdf);
-          heightLeft -= pdfPageHeight;
-        }
-        
-        pdf.save(finalFileName);
-        incrementIfPossible();
-        setShowDownloadModal(false);
-      }).catch((err: any) => {
-        console.error('Error generating PDF:', err);
-        alert('Gagal mendownload PDF: ' + (err.message || err));
-        setShowDownloadModal(false);
-      });
-    } else {
-      const format = fileType === 'png' ? 'image/png' : 'image/jpeg';
-      html2canvas(element, {
-        scale: 2,
-        useCORS: true,
-        logging: false
-      }).then((canvas) => {
+        const format = fileType === 'png' ? 'image/png' : 'image/jpeg';
         const dataUrl = canvas.toDataURL(format);
         const link = document.createElement('a');
         link.href = dataUrl;
         link.download = finalFileName;
         link.click();
-        incrementIfPossible();
-        setShowDownloadModal(false);
-      }).catch((err: any) => {
-        console.error('Error generating image:', err);
-        alert('Gagal mendownload gambar: ' + (err.message || err));
-        setShowDownloadModal(false);
-      });
+      }
+
+      incrementIfPossible();
+      setShowDownloadModal(false);
+    } catch (err: any) {
+      console.error('Error generating download:', err);
+      alert('Gagal mendownload: ' + (err.message || err));
+      setShowDownloadModal(false);
+    } finally {
+      // Restore scroll constraints & scroll positions
+      if (scrollContainer) {
+        scrollContainer.style.overflow = prevOverflow;
+        scrollContainer.style.maxHeight = prevMaxHeight;
+        scrollContainer.style.height = prevHeight;
+        scrollContainer.scrollTop = prevScrollTop;
+      }
+      window.scrollTo(0, prevWindowScrollY);
     }
   };
 
@@ -127,7 +138,8 @@ export const CvPreview: React.FC = () => {
           details: 'text-[12px]',
           sectionHeader: 'text-[14px]',
           bodyHeader: 'text-[13px]',
-          bodyText: 'text-[11px]'
+          bodyText: 'text-[11px]',
+          subText: 'text-[11px]'
         };
       case 'Large':
         return {
@@ -135,7 +147,8 @@ export const CvPreview: React.FC = () => {
           details: 'text-[14px]',
           sectionHeader: 'text-[16px]',
           bodyHeader: 'text-[15px]',
-          bodyText: 'text-[13px]'
+          bodyText: 'text-[13px]',
+          subText: 'text-[13px]'
         };
       default: // Small
         return {
@@ -143,7 +156,8 @@ export const CvPreview: React.FC = () => {
           details: 'text-[10px]',
           sectionHeader: 'text-[12px]',
           bodyHeader: 'text-[11px]',
-          bodyText: 'text-[9.5px]'
+          bodyText: 'text-[9.5px]',
+          subText: 'text-[9.5px]'
         };
     }
   };
@@ -314,11 +328,11 @@ export const CvPreview: React.FC = () => {
         </div>
       </div>
 
-      <div className="grow border-4 border-[#2b85a3] bg-white rounded-xl overflow-y-auto flex flex-col items-center shadow-inner relative">
+      <div id="cv-scroll-container" className="grow border-4 border-[#2b85a3] bg-white rounded-xl overflow-y-auto flex flex-col items-center shadow-inner relative">
         <div 
           id="cv-paper" 
           className={`bg-white p-12 w-full max-w-[800px] min-h-[1000px] ${getFontFamilyStyle()} ${sizes.bodyText}`}
-          style={{ lineHeight: lineHeight }}
+          style={{ lineHeight: lineHeight, overflowWrap: 'break-word', wordBreak: 'break-word' }}
         >
           <div className={`flex gap-6 mb-8 items-center ${alignment === 'Center' ? 'flex-col' : alignment === 'Right' ? 'flex-row-reverse' : 'flex-row'}`}>
             {profile.photoUrl && (
@@ -330,7 +344,7 @@ export const CvPreview: React.FC = () => {
               />
             )}
             <div className={`flex flex-col flex-1 ${getAlignmentStyle()}`}>
-              <h1 className={`${sizes.name} font-black text-gray-900 tracking-tight mb-2 break-all overflow-wrap`}>
+              <h1 className={`${sizes.name} font-black text-gray-900 tracking-tight mb-2`} style={{ overflowWrap: 'break-word', wordBreak: 'break-word' }}>
                 {profile.fullName || "Your Full Name"}
               </h1>
               <div className={`flex flex-wrap gap-2 ${sizes.details} text-gray-600 leading-normal ${alignment === 'Center' ? 'justify-center' : alignment === 'Right' ? 'justify-end' : 'justify-start'}`}>
@@ -363,10 +377,10 @@ export const CvPreview: React.FC = () => {
 
           <div className="space-y-6">
             {profile.description && (
-              <section>
+              <section style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
                 <h3 className={`font-bold uppercase tracking-wide break-words
                   ${headerStyle === 'Grey Pill' 
-                    ? 'bg-slate-200 rounded-full px-5 py-1.5 mb-3 text-[14px] text-slate-700 italic tracking-wider' 
+                    ? `bg-slate-200 rounded-full px-5 py-1.5 mb-3 ${sizes.sectionHeader} text-slate-700 italic tracking-wider` 
                     : `${sizes.sectionHeader} text-gray-800 mb-3`
                   }
                   ${headerStyle === 'Header and Line' ? 'border-b-2 border-black pb-1' : ''}
@@ -374,17 +388,17 @@ export const CvPreview: React.FC = () => {
                 `}>
                   Profile
                 </h3>
-                <p className={`${sizes.bodyText} text-gray-700 leading-relaxed whitespace-pre-wrap break-words overflow-wrap`}>
+                <p className={`${sizes.bodyText} text-gray-700 leading-relaxed whitespace-pre-wrap`} style={{ overflowWrap: 'break-word', wordBreak: 'break-word' }}>
                   {profile.description}
                 </p>
               </section>
             )}
 
-            {experiences.some(e => e.companyName) && (
-              <section>
+            {experiences.some(e => e.companyName || e.role) && (
+              <section style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
                 <h3 className={`font-bold uppercase tracking-wide break-words
                   ${headerStyle === 'Grey Pill' 
-                    ? 'bg-slate-200 rounded-full px-5 py-1.5 mb-3 text-[14px] text-slate-700 italic tracking-wider' 
+                    ? `bg-slate-200 rounded-full px-5 py-1.5 mb-3 ${sizes.sectionHeader} text-slate-700 italic tracking-wider` 
                     : `${sizes.sectionHeader} text-gray-800 mb-3`
                   }
                   ${headerStyle === 'Header and Line' ? 'border-b-2 border-black pb-1' : ''}
@@ -392,17 +406,19 @@ export const CvPreview: React.FC = () => {
                 `}>
                   Work Experience
                 </h3>
-                {experiences.filter(e => e.companyName).map((exp, i) => (
-                  <div key={exp.id || i} className="mb-4">
+                {experiences.filter(e => e.companyName || e.role).map((exp, i) => (
+                  <div key={exp.id || i} className="mb-4 last:mb-0">
                     <div className={`flex justify-between ${sizes.bodyHeader} font-bold text-gray-800 mb-1 gap-4`}>
-                      <span className="break-words">{exp.role} - {exp.companyName}</span>
-                      <span className="text-[11px] text-gray-600 font-normal whitespace-nowrap">
-                        {exp.startYear} {exp.endYear && ` - ${exp.endYear}`}
+                      <span style={{ overflowWrap: 'break-word', wordBreak: 'break-word', flex: 1 }}>
+                        {exp.role}{exp.role && exp.companyName ? ' - ' : ''}{exp.companyName}
+                      </span>
+                      <span className={`${sizes.subText} text-gray-600 font-normal whitespace-nowrap flex-shrink-0`}>
+                        {exp.startYear}{exp.endYear ? ` - ${exp.endYear}` : ''}
                       </span>
                     </div>
-                    {exp.location && <p className="text-[11px] text-gray-500 italic mb-2 break-words">{exp.location}</p>}
+                    {exp.location && <p className={`${sizes.subText} text-gray-500 italic mb-2 break-words`}>{exp.location}</p>}
                     {exp.description && (
-                      <p className={`${sizes.bodyText} text-gray-700 leading-relaxed whitespace-pre-wrap break-words overflow-wrap`}>
+                      <p className={`${sizes.bodyText} text-gray-700 leading-relaxed whitespace-pre-wrap`} style={{ overflowWrap: 'break-word', wordBreak: 'break-word' }}>
                         {exp.description}
                       </p>
                     )}
@@ -411,11 +427,11 @@ export const CvPreview: React.FC = () => {
               </section>
             )}
 
-            {educations.some(e => e.schoolName) && (
-              <section>
+            {educations.some(e => e.schoolName || e.level) && (
+              <section style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
                 <h3 className={`font-bold uppercase tracking-wide break-words
                   ${headerStyle === 'Grey Pill' 
-                    ? 'bg-slate-200 rounded-full px-5 py-1.5 mb-3 text-[14px] text-slate-700 italic tracking-wider' 
+                    ? `bg-slate-200 rounded-full px-5 py-1.5 mb-3 ${sizes.sectionHeader} text-slate-700 italic tracking-wider` 
                     : `${sizes.sectionHeader} text-gray-800 mb-3`
                   }
                   ${headerStyle === 'Header and Line' ? 'border-b-2 border-black pb-1' : ''}
@@ -423,21 +439,23 @@ export const CvPreview: React.FC = () => {
                 `}>
                   Education
                 </h3>
-                {educations.filter(e => e.schoolName).map((edu, i) => (
-                  <div key={edu.id || i} className="mb-4">
+                {educations.filter(e => e.schoolName || e.level).map((edu, i) => (
+                  <div key={edu.id || i} className="mb-4 last:mb-0">
                     <div className={`flex justify-between ${sizes.bodyHeader} font-bold text-gray-800 mb-1 gap-4`}>
-                      <span className="break-words">{edu.level} - {edu.schoolName}</span>
-                      <span className="text-[11px] text-gray-600 font-normal whitespace-nowrap">
-                        {edu.startYear} {edu.endYear && ` - ${edu.endYear}`}
+                      <span style={{ overflowWrap: 'break-word', wordBreak: 'break-word', flex: 1 }}>
+                        {edu.level}{edu.level && edu.schoolName ? ' - ' : ''}{edu.schoolName}
+                      </span>
+                      <span className={`${sizes.subText} text-gray-600 font-normal whitespace-nowrap flex-shrink-0`}>
+                        {edu.startYear}{edu.endYear ? ` - ${edu.endYear}` : ''}
                       </span>
                     </div>
                     {edu.location && (
-                      <p className="text-[11px] text-gray-500 italic mb-2 break-words">
+                      <p className={`${sizes.subText} text-gray-500 italic mb-2 break-words`}>
                         {edu.location} {edu.gpa && `| GPA: ${edu.gpa}`}
                       </p>
                     )}
                     {edu.description && (
-                      <p className={`${sizes.bodyText} text-gray-700 leading-relaxed whitespace-pre-wrap break-words overflow-wrap`}>
+                      <p className={`${sizes.bodyText} text-gray-700 leading-relaxed whitespace-pre-wrap`} style={{ overflowWrap: 'break-word', wordBreak: 'break-word' }}>
                         {edu.description}
                       </p>
                     )}
@@ -446,11 +464,11 @@ export const CvPreview: React.FC = () => {
               </section>
             )}
 
-            {organizations.some(o => o.orgName) && (
-              <section>
+            {organizations.some(o => o.orgName || o.role) && (
+              <section style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
                 <h3 className={`font-bold uppercase tracking-wide break-words
                   ${headerStyle === 'Grey Pill' 
-                    ? 'bg-slate-200 rounded-full px-5 py-1.5 mb-3 text-[14px] text-slate-700 italic tracking-wider' 
+                    ? `bg-slate-200 rounded-full px-5 py-1.5 mb-3 ${sizes.sectionHeader} text-slate-700 italic tracking-wider` 
                     : `${sizes.sectionHeader} text-gray-800 mb-3`
                   }
                   ${headerStyle === 'Header and Line' ? 'border-b-2 border-black pb-1' : ''}
@@ -458,17 +476,19 @@ export const CvPreview: React.FC = () => {
                 `}>
                   Organizational Experience
                 </h3>
-                {organizations.filter(o => o.orgName).map((org, i) => (
-                  <div key={org.id || i} className="mb-4">
+                {organizations.filter(o => o.orgName || o.role).map((org, i) => (
+                  <div key={org.id || i} className="mb-4 last:mb-0">
                     <div className={`flex justify-between ${sizes.bodyHeader} font-bold text-gray-800 mb-1 gap-4`}>
-                      <span className="break-words">{org.role} - {org.orgName}</span>
-                      <span className="text-[11px] text-gray-600 font-normal whitespace-nowrap">
-                        {org.startYear} {org.endYear && ` - ${org.endYear}`}
+                      <span style={{ overflowWrap: 'break-word', wordBreak: 'break-word', flex: 1 }}>
+                        {org.role}{org.role && org.orgName ? ' - ' : ''}{org.orgName}
+                      </span>
+                      <span className={`${sizes.subText} text-gray-600 font-normal whitespace-nowrap flex-shrink-0`}>
+                        {org.startYear}{org.endYear ? ` - ${org.endYear}` : ''}
                       </span>
                     </div>
-                    {org.location && <p className="text-[11px] text-gray-500 italic mb-2 break-words">{org.location}</p>}
+                    {org.location && <p className={`${sizes.subText} text-gray-500 italic mb-2 break-words`}>{org.location}</p>}
                     {org.description && (
-                      <p className={`${sizes.bodyText} text-gray-700 leading-relaxed whitespace-pre-wrap break-words overflow-wrap`}>
+                      <p className={`${sizes.bodyText} text-gray-700 leading-relaxed whitespace-pre-wrap`} style={{ overflowWrap: 'break-word', wordBreak: 'break-word' }}>
                         {org.description}
                       </p>
                     )}
@@ -478,10 +498,10 @@ export const CvPreview: React.FC = () => {
             )}
 
             {skills.some(s => s.category) && (
-              <section>
+              <section style={{ pageBreakInside: 'avoid', breakInside: 'avoid' }}>
                 <h3 className={`font-bold uppercase tracking-wide break-words
                   ${headerStyle === 'Grey Pill' 
-                    ? 'bg-slate-200 rounded-full px-5 py-1.5 mb-3 text-[14px] text-slate-700 italic tracking-wider' 
+                    ? `bg-slate-200 rounded-full px-5 py-1.5 mb-3 ${sizes.sectionHeader} text-slate-700 italic tracking-wider` 
                     : `${sizes.sectionHeader} text-gray-800 mb-3`
                   }
                   ${headerStyle === 'Header and Line' ? 'border-b-2 border-black pb-1' : ''}
@@ -489,11 +509,11 @@ export const CvPreview: React.FC = () => {
                 `}>
                   Skills & Achievements
                 </h3>
-                <ul className="list-disc list-inside text-gray-700 space-y-1.5 break-words">
+                <ul className="list-disc list-inside text-gray-700 space-y-1.5" style={{ overflowWrap: 'break-word', wordBreak: 'break-word' }}>
                   {skills.filter(s => s.category).map((skill, i) => (
-                    <li key={skill.id || i} className={`${sizes.bodyText} overflow-wrap break-words`}>
+                    <li key={skill.id || i} className={`${sizes.bodyText}`} style={{ overflowWrap: 'break-word', wordBreak: 'break-word' }}>
                       <span className="font-bold">{skill.category}</span>
-                      {skill.year && ` (${skill.year})`}: {skill.elaboration}
+                      {skill.year && ` (${skill.year})`}{skill.elaboration ? `: ${skill.elaboration}` : ''}
                     </li>
                   ))}
                 </ul>

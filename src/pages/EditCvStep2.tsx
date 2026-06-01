@@ -44,6 +44,15 @@ const EditCvStep2: React.FC = () => {
     }
     setSaving(true);
     try {
+      // Verify project still exists
+      try {
+        await employmentApi.getAll(projectId);
+      } catch {
+        alert('Project tidak ditemukan. Kembali ke Step 1 untuk membuat ulang.');
+        navigate('/edit/step1');
+        return;
+      }
+
       // Delete existing employment history
       const existing = await employmentApi.getAll(projectId);
       if (existing.data && existing.data.length > 0) {
@@ -66,7 +75,12 @@ const EditCvStep2: React.FC = () => {
       navigate('/edit/step3');
     } catch (err: any) {
       console.error('Error saving employment:', err);
-      alert('Gagal menyimpan data. Pastikan kamu sudah login.');
+      if (err?.message === 'Unauthenticated.' || err?.status === 401) {
+        alert('Sesi login sudah habis. Silakan login ulang.');
+        navigate('/login');
+      } else {
+        alert(err?.message || 'Gagal menyimpan data. Silakan coba lagi.');
+      }
     } finally {
       setSaving(false);
     }

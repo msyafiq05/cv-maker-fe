@@ -62,9 +62,22 @@ const EditCvStep5: React.FC = () => {
         }
       } else {
         activePid = projectId;
-        // Update project title to match full name
-        const title = profile.fullName ? `CV ${profile.fullName}` : 'Untitled Resume';
-        await projectApi.update(activePid, { judul_cv: title });
+        // Verify project still exists, if not create new one
+        try {
+          const title = profile.fullName ? `CV ${profile.fullName}` : 'Untitled Resume';
+          await projectApi.update(activePid, { judul_cv: title });
+        } catch {
+          // Project no longer exists, create a new one
+          console.warn(`Project ${activePid} not found, creating new project...`);
+          const title = profile.fullName ? `CV ${profile.fullName}` : 'Untitled Resume';
+          const createRes = await projectApi.create({ judul_cv: title });
+          if (createRes.data && createRes.data.id) {
+            activePid = createRes.data.id;
+            setProjectId(activePid);
+          } else {
+            throw new Error("Gagal membuat project baru.");
+          }
+        }
       }
 
       // Step B: Sync Skills
@@ -89,7 +102,12 @@ const EditCvStep5: React.FC = () => {
       navigate('/edit/download');
     } catch (err: any) {
       console.error("Error saving CV to database:", err);
-      alert('Gagal menyimpan CV ke database. Pastikan Anda telah masuk (login) dengan benar.');
+      if (err?.message === 'Unauthenticated.' || err?.status === 401) {
+        alert('Sesi login sudah habis. Silakan login ulang.');
+        navigate('/login');
+      } else {
+        alert(err?.message || 'Gagal menyimpan CV ke database. Silakan coba lagi.');
+      }
     } finally {
       setSaving(false);
     }

@@ -339,25 +339,40 @@ const EditCvStep1: React.FC = () => {
 
   const [saving, setSaving] = useState(false);
 
+  const createNewProject = async (): Promise<number> => {
+    const title = profile.fullName ? `CV ${profile.fullName}` : 'Untitled Resume';
+    const createRes = await projectApi.create({ judul_cv: title });
+    if (createRes.data && createRes.data.id) {
+      setProjectId(createRes.data.id);
+      return createRes.data.id;
+    }
+    throw new Error('Gagal membuat project baru.');
+  };
+
   const handleNext = async () => {
     setSaving(true);
     try {
       let activePid = projectId;
 
-      // Create project if none exists
-      if (!activePid) {
-        const title = profile.fullName ? `CV ${profile.fullName}` : 'Untitled Resume';
-        const createRes = await projectApi.create({ judul_cv: title });
-        if (createRes.data && createRes.data.id) {
-          activePid = createRes.data.id;
-          setProjectId(activePid);
-        } else {
-          throw new Error('Gagal membuat project baru.');
+      if (activePid) {
+        // Verify the existing project is still valid
+        try {
+          await projectApi.getById(activePid);
+        } catch {
+          // Project no longer exists (e.g. after database reset), create a new one
+          console.warn(`Project ${activePid} not found, creating new project...`);
+          activePid = null;
+          setProjectId(null);
         }
       }
 
+      // Create project if none exists
+      if (!activePid) {
+        activePid = await createNewProject();
+      }
+
       // Save personal detail
-      await personalDetailApi.upsert(activePid!, {
+      await personalDetailApi.upsert(activePid, {
         full_name: profile.fullName || '',
         phone_number: profile.phone || '',
         email_address: profile.email || '',
@@ -372,7 +387,19 @@ const EditCvStep1: React.FC = () => {
       navigate('/edit/step2');
     } catch (err: any) {
       console.error('Error saving personal detail:', err);
-      alert('Gagal menyimpan data. Pastikan kamu sudah login.');
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('Kamu belum login. Silakan login terlebih dahulu.');
+      } else if (err?.message === 'Unauthenticated.' || err?.status === 401) {
+        // Token expired or invalid — clear session and redirect
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('isLoggedIn');
+        alert('Sesi login sudah habis. Silakan login ulang.');
+        navigate('/login');
+      } else {
+        alert(err?.message || 'Gagal menyimpan data. Silakan coba lagi.');
+      }
     } finally {
       setSaving(false);
     }

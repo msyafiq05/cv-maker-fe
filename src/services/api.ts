@@ -327,6 +327,7 @@ export const clearSession = () => {
   localStorage.removeItem('token');
   localStorage.removeItem('user');
   localStorage.removeItem('isLoggedIn');
+  localStorage.removeItem('cv_projectId');
 };
 
 export const getUser = () => {

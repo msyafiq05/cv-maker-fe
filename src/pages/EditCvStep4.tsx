@@ -44,6 +44,15 @@ const EditCvStep4: React.FC = () => {
     }
     setSaving(true);
     try {
+      // Verify project still exists
+      try {
+        await organizationApi.getAll(projectId);
+      } catch {
+        alert('Project tidak ditemukan. Kembali ke Step 1 untuk membuat ulang.');
+        navigate('/edit/step1');
+        return;
+      }
+
       // Delete existing organizations
       const existing = await organizationApi.getAll(projectId);
       if (existing.data && existing.data.length > 0) {
@@ -66,7 +75,12 @@ const EditCvStep4: React.FC = () => {
       navigate('/edit/step5');
     } catch (err: any) {
       console.error('Error saving organizations:', err);
-      alert('Gagal menyimpan data. Pastikan kamu sudah login.');
+      if (err?.message === 'Unauthenticated.' || err?.status === 401) {
+        alert('Sesi login sudah habis. Silakan login ulang.');
+        navigate('/login');
+      } else {
+        alert(err?.message || 'Gagal menyimpan data. Silakan coba lagi.');
+      }
     } finally {
       setSaving(false);
     }
