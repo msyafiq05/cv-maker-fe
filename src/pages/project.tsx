@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { projectApi } from '../services/api';
 
 interface CvProject {
@@ -11,11 +11,22 @@ interface CvProject {
 
 const Project = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [projects, setProjects]   = useState<CvProject[]>([]);
   const [loading, setLoading]     = useState(true);
   const [creating, setCreating]   = useState(false);
   const [error, setError]         = useState('');
+
+  // ─── Scroll to top if location state has scrollToTop ───────────
+  useEffect(() => {
+    if (location.state?.scrollToTop) {
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 100);
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   // ─── Ambil semua CV project milik user ───────────────────────
   useEffect(() => {

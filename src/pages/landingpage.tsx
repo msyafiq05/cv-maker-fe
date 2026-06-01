@@ -15,7 +15,16 @@ const LandingPage = () => {
       setTimeout(() => {
         document.getElementById('about-us-section')?.scrollIntoView({ behavior: 'smooth' });
       }, 100);
-      // Clean state to avoid scrolling again on back navigation
+      window.history.replaceState({}, document.title);
+    } else if (location.state?.scrollToTemplate) {
+      setTimeout(() => {
+        document.getElementById('template-section')?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+      window.history.replaceState({}, document.title);
+    } else if (location.state?.scrollToTop) {
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 100);
       window.history.replaceState({}, document.title);
     }
   }, [location.state]);

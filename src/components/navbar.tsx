@@ -10,11 +10,21 @@ const Navbar = () => {
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
   const user = getUser();
 
-  const handleTemplateClick = () => {
-    if (!isLoggedIn && location.pathname === '/') {
+  const handleHomeClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (location.pathname === '/') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      navigate('/', { state: { scrollToTop: true } });
+    }
+  };
+
+  const handleTemplateClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (location.pathname === '/') {
       document.getElementById('template-section')?.scrollIntoView({ behavior: 'smooth' });
     } else {
-      navigate('/templates');
+      navigate('/', { state: { scrollToTemplate: true } });
     }
   };
 
@@ -42,6 +52,15 @@ const Navbar = () => {
     }
   };
 
+  const handleProjectClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (location.pathname === '/project') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      navigate('/project', { state: { scrollToTop: true } });
+    }
+  };
+
   return (
     <nav className="sticky top-0 bg-gradient-to-r from-[#55B3EB] to-[#BBE4FB] px-8 py-4 flex items-center justify-between shadow-md z-50">
       <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
@@ -53,10 +72,10 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-8 font-medium text-slate-800 text-sm">
-          <Link to="/" className="hover:text-slate-900 transition">Home</Link>
+          <span onClick={handleHomeClick} className="cursor-pointer hover:text-slate-900 transition">Home</span>
           <span onClick={handleAboutUsClick} className="cursor-pointer hover:text-slate-900 transition">About us</span>
           <span onClick={handleTemplateClick} className="cursor-pointer hover:text-slate-900 transition">Template</span>
-          <Link to="/project" className="hover:text-slate-900 transition">Project</Link>
+          <span onClick={handleProjectClick} className="cursor-pointer hover:text-slate-900 transition">Project</span>
           {isLoggedIn && user?.role === 'admin' && (
             <Link to="/Admin/Dashboard" className="hover:text-slate-900 transition">Dashboard</Link>
           )}
