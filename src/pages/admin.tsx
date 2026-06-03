@@ -19,6 +19,16 @@ interface DashboardStats {
   total_downloads: number;
 }
 
+interface ContactMessage {
+  id: number;
+  name: string;
+  email: string;
+  subject: string | null;
+  message: string;
+  is_read: boolean;
+  created_at: string;
+}
+
 const AdminDashboard = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [stats, setStats] = useState<DashboardStats>({
@@ -28,6 +38,9 @@ const AdminDashboard = () => {
     total_downloads: 0,
   });
   const [searchQuery, setSearchQuery] = useState('');
+  const [contactMessages, setContactMessages] = useState<ContactMessage[]>([]);
+  const [searchContactQuery, setSearchContactQuery] = useState('');
+  const [expandedMessageId, setExpandedMessageId] = useState<number | null>(null);
 
   // States for Add User Modal
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -51,9 +64,21 @@ const AdminDashboard = () => {
     }
   };
 
+  const fetchContactMessages = async () => {
+    try {
+      const response = await adminApi.getContactMessages();
+      if (response.data) {
+        setContactMessages(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching contact messages:', error);
+    }
+  };
+
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchDashboardData();
+    fetchContactMessages();
   }, []);
 
   useEffect(() => {
@@ -76,7 +101,7 @@ const AdminDashboard = () => {
   }, [searchQuery]);
 
   const handleDeleteUser = async (id: number) => {
-    if (window.confirm('Apakah Anda yakin ingin menghapus user ini?')) {
+    if (window.confirm('Are you sure you want to delete this user?')) {
       try {
         const response = await adminApi.deleteUser(id);
         if (response.status === 'success') {
@@ -85,7 +110,21 @@ const AdminDashboard = () => {
         }
       } catch (error) {
         console.error('Error deleting user:', error);
-        alert('Gagal menghapus user');
+        alert('Failed to delete user');
+      }
+    }
+  };
+
+  const handleDeleteContactMessage = async (id: number) => {
+    if (window.confirm('Are you sure you want to delete this message?')) {
+      try {
+        const response = await adminApi.deleteContactMessage(id);
+        if (response.status === 'success') {
+          setContactMessages(contactMessages.filter((msg) => msg.id !== id));
+        }
+      } catch (error) {
+        console.error('Error deleting contact message:', error);
+        alert('Failed to delete message');
       }
     }
   };
@@ -139,6 +178,12 @@ const AdminDashboard = () => {
       setIsSubmitting(false);
     }
   };
+
+  const filteredContactMessages = contactMessages.filter(msg => 
+    msg.name.toLowerCase().includes(searchContactQuery.toLowerCase()) ||
+    msg.email.toLowerCase().includes(searchContactQuery.toLowerCase()) ||
+    (msg.subject && msg.subject.toLowerCase().includes(searchContactQuery.toLowerCase()))
+  );
 
   return (
     <div className="flex flex-col min-h-screen bg-white font-sans antialiased">
@@ -292,7 +337,7 @@ const AdminDashboard = () => {
                       last access
                     </span>
                   </th>
-                  <th className="py-3 px-2 pb-4 font-bold text-center">Actions</th>
+                  <th className="py-3 px-2 pb-4 font-bold text-center">Delete</th>
                 </tr>
               </thead>
               <tbody className="text-sm text-gray-700">
@@ -324,6 +369,135 @@ const AdminDashboard = () => {
               </tbody>
             </table>
           </div>
+        </section>
+
+        {/* SECTION: CONTACT MESSAGES */}
+        <section className="mt-20">
+          <div className="flex items-end justify-between mb-8">
+            <h2 className="text-[38px] font-bold text-[#4682B4] tracking-tight leading-none">
+              Contact Messages
+            </h2>
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-gray-500 font-medium">
+                {filteredContactMessages.length} messages received
+              </span>
+              {/* Input Search untuk Contact Messages */}
+              <div className="relative">
+                <span className="absolute inset-y-0 left-3 flex items-center text-gray-400 text-sm">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </span>
+                <input
+                  type="text"
+                  placeholder="Search messages"
+                  value={searchContactQuery}
+                  onChange={(e) => setSearchContactQuery(e.target.value)}
+                  className="w-[260px] pl-9 pr-4 py-1.5 border border-gray-300 rounded-md text-sm bg-white focus:outline-none focus:border-[#4682B4] placeholder-gray-400"
+                />
+              </div>
+            </div>
+          </div>
+
+          {filteredContactMessages.length === 0 ? (
+            <div className="text-center py-16 text-gray-400">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto mb-3 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+              </svg>
+              <p className="text-sm font-medium">No messages yet</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto w-full">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b-[3px] border-[#D9D9D9] text-gray-800 text-base font-bold">
+                    <th className="py-3 px-2 pb-4 font-bold">
+                      <span className="inline-flex items-center gap-1.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        Sender
+                      </span>
+                    </th>
+                    <th className="py-3 px-2 pb-4 font-bold">
+                      <span className="inline-flex items-center gap-1.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        Email
+                      </span>
+                    </th>
+                    <th className="py-3 px-2 pb-4 font-bold">
+                      <span className="inline-flex items-center gap-1.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                        </svg>
+                        Subject
+                      </span>
+                    </th>
+                    <th className="py-3 px-2 pb-4 font-bold">
+                      <span className="inline-flex items-center gap-1.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Date
+                      </span>
+                    </th>
+                    <th className="py-3 px-2 pb-4 font-bold text-center">Detail</th>
+                    <th className="py-3 px-2 pb-4 font-bold text-center">Delete</th>
+                  </tr>
+                </thead>
+                <tbody className="text-sm text-gray-700">
+                  {filteredContactMessages.map((msg) => (
+                    <>
+                      <tr key={msg.id} className={`align-middle border-b border-gray-100 cursor-pointer hover:bg-[#f6faff] transition-colors ${!msg.is_read ? 'bg-blue-50/40' : ''}`} onClick={() => setExpandedMessageId(expandedMessageId === msg.id ? null : msg.id)}>
+                        <td className="py-5 px-2">
+                          <div className="flex items-center gap-2">
+                            {!msg.is_read && <span className="w-2 h-2 rounded-full bg-[#4682B4] shrink-0" />}
+                            <span className={`${!msg.is_read ? 'font-semibold text-gray-800' : 'font-medium text-gray-600'}`}>{msg.name}</span>
+                          </div>
+                        </td>
+                        <td className="py-5 px-2 text-gray-600">{msg.email}</td>
+                        <td className="py-5 px-2 text-gray-600">{msg.subject || <span className="text-gray-300 italic">—</span>}</td>
+                        <td className="py-5 px-2 text-gray-500 font-light">{new Date(msg.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</td>
+                        <td className="py-5 px-2 text-center">
+                          <button className="text-[#4682B4] hover:text-[#3A6D99] transition-colors p-1" onClick={() => setExpandedMessageId(expandedMessageId === msg.id ? null : msg.id)}>
+                            <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 mx-auto transition-transform ${expandedMessageId === msg.id ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </button>
+                        </td>
+                        <td className="py-5 px-2 text-center">
+                          <button 
+                            className="text-red-500 hover:text-red-700 transition-colors p-1"
+                            title="Delete Message"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteContactMessage(msg.id);
+                            }}
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                          </button>
+                        </td>
+                      </tr>
+                      {expandedMessageId === msg.id && (
+                        <tr key={`${msg.id}-detail`}>
+                          <td colSpan={6} className="px-4 py-5 bg-[#f8fbff] border-b border-gray-200">
+                            <div className="max-w-3xl">
+                              <p className="text-xs font-semibold text-[#4682B4] mb-2 uppercase tracking-wider">Message Content:</p>
+                              <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">{msg.message}</p>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </section>
 
       </main>

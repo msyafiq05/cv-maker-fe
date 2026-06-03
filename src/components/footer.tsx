@@ -14,8 +14,8 @@ const Footer = () => {
             <span className="text-2xl font-bold text-white tracking-wide">CV MAKER</span>
           </div>
           <p className="text-sm text-white opacity-90 leading-snug italic max-w-[200px]">
-            Helping professionals<br/>
-            build their careers<br/>
+            Helping professionals<br />
+            build their careers<br />
             through compelling resumes.
           </p>
         </div>
@@ -26,7 +26,7 @@ const Footer = () => {
             <h4 className="font-bold mb-4 text-sm">Product</h4>
             <ul className="space-y-3 text-xs font-medium">
               <li><Link to="/templates" className="hover:text-black transition">CV Templates</Link></li>
-              <li><Link to="/edit" className="hover:text-black transition">Preview</Link></li>
+              <li><Link to="/project" className="hover:text-black transition">Project</Link></li>
             </ul>
           </div>
           <div>
@@ -63,12 +63,12 @@ const Footer = () => {
           </a>
           <a href="https://www.linkedin.com/company/cvmaker" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-[#0A66C2] flex items-center justify-center text-white shadow-sm hover:opacity-90 transition">
             <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="0" className="w-4 h-4">
-              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452z"/>
+              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452z" />
             </svg>
           </a>
           <a href="https://www.tiktok.com/@cvmaker" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-black flex items-center justify-center text-white shadow-sm hover:opacity-90 transition">
             <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-              <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.02 1.62 4.17 1.22 1.34 2.97 2.1 4.78 2.2v3.7c-1.89-.04-3.74-.75-5.18-1.99-.07 3.66.02 7.33-.06 10.99-.18 2.13-1.28 4.14-3.14 5.22-2.18 1.31-4.99 1.4-7.25.24-2.58-1.24-4.22-4.08-3.95-6.97.23-2.73 2.2-5.18 4.88-5.83V11.5c-1.46.22-2.72 1.25-3.21 2.65-.63 1.69-.17 3.73 1.13 4.93 1.28 1.24 3.25 1.53 4.82.72 1.27-.61 2.05-1.95 2.09-3.37.05-3.83.01-7.66.02-11.49-.03-.94-.03-1.89-.03-2.83-.01-.01-.01-.01-.01-.02Z"/>
+              <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.02 1.62 4.17 1.22 1.34 2.97 2.1 4.78 2.2v3.7c-1.89-.04-3.74-.75-5.18-1.99-.07 3.66.02 7.33-.06 10.99-.18 2.13-1.28 4.14-3.14 5.22-2.18 1.31-4.99 1.4-7.25.24-2.58-1.24-4.22-4.08-3.95-6.97.23-2.73 2.2-5.18 4.88-5.83V11.5c-1.46.22-2.72 1.25-3.21 2.65-.63 1.69-.17 3.73 1.13 4.93 1.28 1.24 3.25 1.53 4.82.72 1.27-.61 2.05-1.95 2.09-3.37.05-3.83.01-7.66.02-11.49-.03-.94-.03-1.89-.03-2.83-.01-.01-.01-.01-.01-.02Z" />
             </svg>
           </a>
         </div>

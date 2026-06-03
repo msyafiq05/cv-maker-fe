@@ -30,11 +30,7 @@ const LandingPage = () => {
   }, [location.state]);
 
   const previewTemplates = [
-    { id: 1, name: 'PROFESSIONAL BLUE', img: 'https://via.placeholder.com/400x600', isPreview: false },
     { id: 2, name: 'MINIMALIST BLACK', img: '', isPreview: true },
-    { id: 3, name: 'MODERN CREATIVE', img: 'https://via.placeholder.com/400x600', isPreview: false },
-    { id: 4, name: 'ATS FRIENDLY', img: 'https://via.placeholder.com/400x600', isPreview: false },
-    { id: 5, name: 'EXECUTIVE ELEGANCE', img: 'https://via.placeholder.com/400x600', isPreview: false },
   ];
 
   return (
@@ -94,19 +90,18 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Template Section - Always visible */}
-      <section id="template-section" className="bg-white py-16 pb-32">
+      <section id="template-section" className="bg-white pt-10 pb-32">
           <div className="max-w-7xl mx-auto px-8">
-            <h2 className="text-center text-5xl font-bold italic text-[#55B3EB] mb-16 tracking-widest uppercase">
+            <h2 className="text-center text-5xl font-bold italic text-[#55B3EB] mb-12 tracking-widest uppercase">
               TEMPLATE
             </h2>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            <div className="flex justify-start gap-6">
               {previewTemplates.map((item) => (
                 <div 
                   key={item.id} 
                   onClick={() => navigate('/templates')}
-                  className="flex flex-col items-center group cursor-pointer"
+                  className="flex flex-col items-center group cursor-pointer w-full max-w-[250px]"
                 >
                   <div className="w-full relative aspect-[3/4] overflow-hidden rounded-xl border-2 border-slate-100 shadow-sm group-hover:shadow-xl group-hover:border-[#55B3EB] transition-all duration-300 bg-white flex items-center justify-center">
                     {!item.isPreview && item.img && (

@@ -314,6 +314,33 @@ export const adminApi = {
       method: 'DELETE',
       headers: headers(),
     }).then(handleResponse),
+
+  getContactMessages: () =>
+    fetch(`${BASE_URL}/admin/contact-messages`, { headers: headers() }).then(handleResponse),
+
+  deleteContactMessage: (id: number) =>
+    fetch(`${BASE_URL}/admin/contact-messages/${id}`, {
+      method: 'DELETE',
+      headers: headers(),
+    }).then(handleResponse),
+};
+
+// ================================================================
+// CONTACT MESSAGES
+// ================================================================
+
+export const contactApi = {
+  send: (data: {
+    name: string;
+    email: string;
+    subject?: string;
+    message: string;
+  }) =>
+    fetch(`${BASE_URL}/contact-messages`, {
+      method: 'POST',
+      headers: headers(false),
+      body: JSON.stringify(data),
+    }).then(handleResponse),
 };
 
 // ─── Utility: simpan & hapus sesi login ─────────────────────

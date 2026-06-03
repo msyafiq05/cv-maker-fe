@@ -35,7 +35,7 @@ const Profile = () => {
     const token = localStorage.getItem('token');
     if (!token) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setError('Anda belum login. Silakan login terlebih dahulu.');
+      setError('You are not logged in. Please log in first.');
       setFetching(false);
       return;
     }
@@ -59,7 +59,7 @@ const Profile = () => {
       })
       .catch((err) => {
         console.error('Error fetching profile:', err);
-        setError(err?.message ?? 'Gagal mengambil data profil.');
+        setError(err?.message ?? 'Failed to fetch profile data.');
       })
       .finally(() => setFetching(false));
   }, []);
@@ -75,7 +75,7 @@ const Profile = () => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 2 * 1024 * 1024) {
-        alert('Ukuran file maksimal adalah 2MB!');
+        alert('Maximum file size is 2MB!');
         return;
       }
       const reader = new FileReader();
@@ -92,7 +92,7 @@ const Profile = () => {
     setSuccess('');
 
     if (userData.password && userData.password !== userData.password_confirmation) {
-      setError('Password dan konfirmasi password tidak cocok!');
+      setError('Password and confirm password do not match!');
       return;
     }
 
@@ -118,12 +118,12 @@ const Profile = () => {
       const updatedUser = { ...localUser, ...res.data };
       localStorage.setItem('user', JSON.stringify(updatedUser));
 
-      setSuccess('Profil berhasil diperbarui!');
+      setSuccess('Profile updated successfully!');
       setUserData(prev => ({ ...prev, password: '', password_confirmation: '' }));
     } catch (err: unknown) {
       const e = err as { errors?: Record<string, string>; message?: string };
       const firstError = e?.errors ? Object.values(e.errors)[0] : null;
-      setError(firstError ?? e?.message ?? 'Gagal memperbarui profil.');
+      setError(firstError ?? e?.message ?? 'Failed to update profile.');
     } finally {
       setLoading(false);
     }
@@ -362,7 +362,7 @@ const Profile = () => {
             ) : (
               initials
             )}
-            <div className="avatar-overlay">UBAH</div>
+            <div className="avatar-overlay">CHANGE</div>
           </div>
           <input 
             type="file" 
@@ -479,27 +479,11 @@ const Profile = () => {
           </div>
 
           <button type="submit" disabled={loading} className="btn-save">
-            {loading ? 'Menyimpan...' : 'Simpan Perubahan'}
+            {loading ? 'Saving...' : 'Save Changes'}
           </button>
         </form>
 
-        {/* ── My email Address ── */}
-        <div className="email-section">
-          <h3>My email Address</h3>
-          <div className="email-row">
-            <div className="email-icon">
-              <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-              </svg>
-            </div>
-            <div className="email-info">
-              <strong>{userData.email || '-'}</strong>
-              <span>1 month ago</span>
-            </div>
-          </div>
-          <a className="add-email-link" href="#">+ Add Email Address</a>
-        </div>
+
 
       </div>
     </>

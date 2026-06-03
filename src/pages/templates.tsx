@@ -6,27 +6,23 @@ const Templates = () => {
   const navigate = useNavigate();
 
   const templateData = [
-    { id: 1, name: 'Professional Blue', image: 'https://via.placeholder.com/400x600' },
     { id: 2, name: 'Minimalist Black', image: 'https://via.placeholder.com/400x600' },
-    { id: 3, name: 'Modern Creative', image: 'https://via.placeholder.com/400x600' },
-    { id: 4, name: 'ATS Friendly', image: 'https://via.placeholder.com/400x600' },
-    { id: 5, name: 'Executive Elegance', image: 'https://via.placeholder.com/400x600' },
   ];
 
   return (
     <>
       {/* MAIN CONTENT ONLY - Navbar & Footer ditangani oleh Layout.tsx */}
-      <main className="py-20 px-8">
-        <h1 className="text-center text-5xl font-black text-sky-400 mb-16 tracking-widest uppercase italic">
+      <main className="pt-10 pb-20 px-8">
+        <h1 className="text-center text-5xl font-black text-sky-400 mb-12 tracking-widest uppercase italic">
           TEMPLATE
         </h1>
         
-        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+        <div className="max-w-7xl mx-auto flex justify-start gap-8">
           {templateData.map((item) => (
             <div 
               key={item.id} 
               onClick={() => navigate('/edit', { state: { templateId: item.id } })}
-              className="group cursor-pointer relative"
+              className="group cursor-pointer relative w-full max-w-[250px]"
             >
               {/* Gambar Template & Hover Effect */}
               <div className="relative aspect-[3/4] overflow-hidden rounded-3xl border-4 border-slate-100 shadow-md group-hover:shadow-2xl group-hover:border-sky-300 transition-all duration-300">

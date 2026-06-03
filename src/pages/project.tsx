@@ -32,7 +32,7 @@ const Project = () => {
   useEffect(() => {
     projectApi.getAll()
       .then((res) => setProjects(res.data))
-      .catch(() => setError('Gagal memuat project. Pastikan kamu sudah login.'))
+      .catch(() => setError('Failed to load projects. Make sure you are logged in.'))
       .finally(() => setLoading(false));
   }, []);
 
@@ -44,7 +44,7 @@ const Project = () => {
       const newProject: CvProject = res.data;
       navigate('/edit', { state: { projectId: newProject.id } });
     } catch {
-      setError('Gagal membuat project baru.');
+      setError('Failed to create new project.');
     } finally {
       setCreating(false);
     }
@@ -53,13 +53,13 @@ const Project = () => {
   // ─── Hapus CV project ────────────────────────────────────────
   const handleDelete = async (e: React.MouseEvent, projectId: number) => {
     e.stopPropagation();
-    if (!confirm('Yakin ingin menghapus CV ini?')) return;
+    if (!confirm('Are you sure you want to delete this CV?')) return;
 
     try {
       await projectApi.delete(projectId);
       setProjects(prev => prev.filter(p => p.id !== projectId));
     } catch {
-      alert('Gagal menghapus project.');
+      alert('Failed to delete project.');
     }
   };
 
@@ -73,8 +73,8 @@ const Project = () => {
 
   return (
     <>
-      <div className="py-20 px-8">
-        <h1 className="text-center text-5xl font-black text-sky-400 mb-4 tracking-widest uppercase italic">
+      <div className="pt-10 pb-20 px-8">
+        <h1 className="text-center text-5xl font-black text-sky-400 mb-12 tracking-widest uppercase italic">
           YOUR PROJECT
         </h1>
 
@@ -136,7 +136,7 @@ const Project = () => {
                 <button
                   onClick={(e) => handleDelete(e, item.id)}
                   className="text-slate-400 hover:text-red-500 transition"
-                  title="Hapus"
+                  title="Delete"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
