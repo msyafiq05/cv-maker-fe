@@ -1,10 +1,14 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import loginImg from '../assets/login.png';
 import { authApi, saveSession } from '../services/api';
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // If user was redirected here from a protected page, capture the origin
+  const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,7 +33,7 @@ const Login = () => {
         if (res.user && res.user.role === 'admin') {
           navigate('/admin/dashboard');
         } else {
-          navigate('/');
+          navigate(from);
         }
         // =========================================================
 

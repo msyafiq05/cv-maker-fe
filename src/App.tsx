@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
 import Layout from './components/layout';
+import ProtectedRoute from './components/ProtectedRoute';
 
 import LandingPage from './pages/landingpage';
 import Login from './pages/login';
@@ -43,21 +44,24 @@ function App() {
 
         <Route element={<Layout />}>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/templates" element={<Templates />} />
-          <Route path="/project" element={<Project />} />
           
-          {/* CV Edit Steps */}
-          <Route element={<CvEditProviderWrapper />}>
-            <Route path="/edit" element={<EditRedirect />} />
-            <Route path="/edit/step1" element={<EditCvStep1 />} />
-            <Route path="/edit/step2" element={<EditCvStep2 />} />
-            <Route path="/edit/step3" element={<EditCvStep3 />} />
-            <Route path="/edit/step4" element={<EditCvStep4 />} />
-            <Route path="/edit/step5" element={<EditCvStep5 />} />
-            <Route path="/edit/download" element={<DownloadCv />} />
+          {/* Protected Routes - requires login */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/templates" element={<Templates />} />
+            <Route path="/project" element={<Project />} />
+            <Route path="/profile" element={<Profile />} />
+            
+            {/* CV Edit Steps */}
+            <Route element={<CvEditProviderWrapper />}>
+              <Route path="/edit" element={<EditRedirect />} />
+              <Route path="/edit/step1" element={<EditCvStep1 />} />
+              <Route path="/edit/step2" element={<EditCvStep2 />} />
+              <Route path="/edit/step3" element={<EditCvStep3 />} />
+              <Route path="/edit/step4" element={<EditCvStep4 />} />
+              <Route path="/edit/step5" element={<EditCvStep5 />} />
+              <Route path="/edit/download" element={<DownloadCv />} />
+            </Route>
           </Route>
-
-          <Route path="/profile" element={<Profile />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/contact-us" element={<ContactUs />} />

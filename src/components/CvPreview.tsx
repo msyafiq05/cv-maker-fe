@@ -243,9 +243,8 @@ export const CvPreview: React.FC = () => {
               }}
               className="flex items-center gap-2 text-sm font-bold text-gray-700 cursor-pointer hover:text-sky-500 transition"
             >
-              <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path></svg>
               {lineHeight} 
-              <svg className="w-3 h-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path></svg>
+              <svg className="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path></svg>
             </div>
             {showSpacingDropdown && (
               <div className="absolute left-0 mt-2 w-32 bg-white border border-gray-100 rounded-lg shadow-xl py-1 z-50 animate-fade-in">

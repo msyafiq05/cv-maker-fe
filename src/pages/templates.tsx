@@ -13,7 +13,7 @@ const Templates = () => {
     <>
       {/* MAIN CONTENT ONLY - Navbar & Footer ditangani oleh Layout.tsx */}
       <main className="pt-10 pb-20 px-8">
-        <h1 className="text-center text-5xl font-black text-sky-400 mb-12 tracking-widest uppercase italic">
+        <h1 className="text-center text-5xl font-bold text-[#6BC4F0] mb-12 tracking-widest uppercase italic font-sans">
           TEMPLATE
         </h1>
         
