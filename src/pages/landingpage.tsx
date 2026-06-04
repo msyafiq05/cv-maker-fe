@@ -92,7 +92,7 @@ const LandingPage = () => {
 
       <section id="template-section" className="bg-white pt-10 pb-32">
           <div className="max-w-7xl mx-auto px-8">
-            <h2 className="text-center text-5xl font-bold italic text-[#55B3EB] mb-12 tracking-widest uppercase">
+            <h2 className="text-center text-5xl font-bold text-[#55B3EB] mb-12 tracking-widest uppercase">
               TEMPLATE
             </h2>
             

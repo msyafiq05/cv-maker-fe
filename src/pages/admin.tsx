@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-import Navbar from '../components/navbar';
-import Footer from '../components/footer';
 import { adminApi, authApi } from '../services/api';
 
 interface User {
@@ -188,10 +186,7 @@ const AdminDashboard = () => {
   return (
     <div className="flex flex-col min-h-screen bg-white font-sans antialiased">
 
-      {/* 1. NAVBAR */}
-      <Navbar />
-
-      {/* 2. MAIN CONTENT AREA */}
+      {/* MAIN CONTENT AREA */}
       <main className="flex-1 max-w-[1200px] w-full mx-auto px-8 py-16">
 
         {/* HEADER & CARDS SECTION - FLEX LAYOUT */}
@@ -501,9 +496,6 @@ const AdminDashboard = () => {
         </section>
 
       </main>
-
-      {/* 3. FOOTER */}
-      <Footer />
 
       {/* MODAL TAMBAH USER */}
       {isModalOpen && (

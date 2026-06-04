@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
 import Layout from './components/layout';
-import ProtectedRoute from './components/ProtectedRoute';
+import { ProtectedRoute, AdminRoute } from './components/ProtectedRoute';
 
 import LandingPage from './pages/landingpage';
 import Login from './pages/login';
@@ -45,11 +45,10 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/" element={<LandingPage />} />
           
-          {/* Protected Routes - requires login */}
+          {/* Protected Routes - requires login, blocks admin */}
           <Route element={<ProtectedRoute />}>
             <Route path="/templates" element={<Templates />} />
             <Route path="/project" element={<Project />} />
-            <Route path="/profile" element={<Profile />} />
             
             {/* CV Edit Steps */}
             <Route element={<CvEditProviderWrapper />}>
@@ -62,6 +61,15 @@ function App() {
               <Route path="/edit/download" element={<DownloadCv />} />
             </Route>
           </Route>
+
+          {/* Admin-only route */}
+          <Route element={<AdminRoute />}>
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          </Route>
+
+          {/* Profile - accessible by both admin and user (login required) */}
+          <Route path="/profile" element={<Profile />} />
+
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/contact-us" element={<ContactUs />} />
@@ -84,12 +92,6 @@ function App() {
         <Route 
           path="/signup" 
           element={<Signup />}
-        />
-
-        {/* Halaman Admin Dashboard */}
-        <Route 
-          path="/admin/dashboard" 
-          element={<AdminDashboard />} 
         />
 
       </Routes>

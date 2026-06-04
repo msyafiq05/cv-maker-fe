@@ -73,11 +73,15 @@ const Navbar = () => {
 
         <div className="flex items-center gap-8 font-medium text-slate-800 text-sm">
           <span onClick={handleHomeClick} className="cursor-pointer hover:text-slate-900 transition">Home</span>
-          <span onClick={handleAboutUsClick} className="cursor-pointer hover:text-slate-900 transition">About us</span>
-          <span onClick={handleTemplateClick} className="cursor-pointer hover:text-slate-900 transition">Template</span>
-          <span onClick={handleProjectClick} className="cursor-pointer hover:text-slate-900 transition">Project</span>
+          {!(isLoggedIn && user?.role === 'admin') && (
+            <>
+              <span onClick={handleAboutUsClick} className="cursor-pointer hover:text-slate-900 transition">About us</span>
+              <span onClick={handleTemplateClick} className="cursor-pointer hover:text-slate-900 transition">Template</span>
+              <span onClick={handleProjectClick} className="cursor-pointer hover:text-slate-900 transition">Project</span>
+            </>
+          )}
           {isLoggedIn && user?.role === 'admin' && (
-            <Link to="/Admin/Dashboard" className="hover:text-slate-900 transition">Dashboard</Link>
+            <Link to="/admin/dashboard" className="hover:text-slate-900 transition">Dashboard</Link>
           )}
 
           {isLoggedIn ? (
