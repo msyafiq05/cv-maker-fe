@@ -54,8 +54,13 @@ const EditCvStep1: React.FC = () => {
             description: res.data.short_description || '',
             photoUrl: res.data.foto_profil || ''
           });
+        } else {
+          setProfile({ fullName: '', phone: '', email: '', placeOfBirth: '', dateOfBirth: '', address: '', website: '', description: '', photoUrl: '' });
         }
-      }).catch(err => console.error("Error loading profile:", err));
+      }).catch(err => {
+        console.error("Error loading profile:", err);
+        setProfile({ fullName: '', phone: '', email: '', placeOfBirth: '', dateOfBirth: '', address: '', website: '', description: '', photoUrl: '' });
+      });
 
       // Load employment history
       employmentApi.getAll(pid).then((res) => {
@@ -149,7 +154,7 @@ const EditCvStep1: React.FC = () => {
         // Pre-populate with Daniel Gallego data
         setProfile({
           fullName: 'DANIEL GALLEGO',
-          phone: '123 Anywhere St., Any City',
+          phone: '+62 812 3456 7890',
           email: 'hello@reallygreatsite.com',
           placeOfBirth: 'Any City',
           dateOfBirth: '1995-01-01',

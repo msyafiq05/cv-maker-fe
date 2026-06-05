@@ -3,7 +3,6 @@ import React from 'react';
 const BlackWhiteTemplates = () => {
   return (
     <div className="bg-white w-full h-full p-12 font-sans text-slate-800 shadow-xl overflow-hidden flex flex-col">
-      {/* Header */}
       <div className="mb-6">
         <h1 className="text-[44px] font-bold text-slate-800 tracking-tight leading-none mb-3">
           DANIEL GALLEGO
@@ -12,11 +11,10 @@ const BlackWhiteTemplates = () => {
           UX DESIGNER
         </h2>
         <p className="text-[13px] text-slate-700">
-          123 Anywhere St., Any City | hello@reallygreatsite.com | www.reallygreatsite.com
+          +62 ......... | hello@reallygreatsite.com | www.reallygreatsite.com
         </p>
       </div>
 
-      {/* SUMMARY */}
       <div className="mb-6">
         <div className="bg-slate-200 rounded-full px-5 py-1.5 mb-3">
           <h3 className="text-[14px] font-bold italic tracking-wider text-slate-700 uppercase">
@@ -28,7 +26,6 @@ const BlackWhiteTemplates = () => {
         </p>
       </div>
 
-      {/* TECHNICAL SKILLS */}
       <div className="mb-6">
         <div className="bg-slate-200 rounded-full px-5 py-1.5 mb-3">
           <h3 className="text-[14px] font-bold italic tracking-wider text-slate-700 uppercase">
@@ -54,15 +51,13 @@ const BlackWhiteTemplates = () => {
         </div>
       </div>
 
-      {/* PROFESSIONAL EXPERIENCE */}
       <div className="mb-6">
         <div className="bg-slate-200 rounded-full px-5 py-1.5 mb-3">
           <h3 className="text-[14px] font-bold italic tracking-wider text-slate-700 uppercase">
             PROFESSIONAL EXPERIENCE
           </h3>
         </div>
-        
-        {/* Experience 1 */}
+
         <div className="mb-4">
           <div className="flex justify-between items-baseline mb-1">
             <h4 className="text-[13.5px] font-bold text-slate-800">Instant Chartz App, Morcelle Program</h4>
@@ -75,7 +70,6 @@ const BlackWhiteTemplates = () => {
           </ul>
         </div>
 
-        {/* Experience 2 */}
         <div>
           <div className="flex justify-between items-baseline mb-1">
             <h4 className="text-[13.5px] font-bold text-slate-800">System UX Engineer, XarrowAI Industries</h4>
@@ -89,7 +83,6 @@ const BlackWhiteTemplates = () => {
         </div>
       </div>
 
-      {/* EDUCATION */}
       <div className="mb-6">
         <div className="bg-slate-200 rounded-full px-5 py-1.5 mb-3">
           <h3 className="text-[14px] font-bold italic tracking-wider text-slate-700 uppercase">
@@ -97,7 +90,6 @@ const BlackWhiteTemplates = () => {
           </h3>
         </div>
 
-        {/* Education 1 */}
         <div className="mb-3">
           <div className="flex justify-between items-baseline mb-0.5">
             <h4 className="text-[13.5px] font-bold text-slate-800">UX Industrial Basics and General Application</h4>
@@ -110,7 +102,6 @@ const BlackWhiteTemplates = () => {
           </ul>
         </div>
 
-        {/* Education 2 */}
         <div>
           <div className="flex justify-between items-baseline mb-0.5">
             <h4 className="text-[13.5px] font-bold text-slate-800">Bachelor of Design in Process Engineering</h4>
@@ -123,7 +114,6 @@ const BlackWhiteTemplates = () => {
         </div>
       </div>
 
-      {/* ADDITIONAL INFORMATION */}
       <div>
         <div className="bg-slate-200 rounded-full px-5 py-1.5 mb-3">
           <h3 className="text-[14px] font-bold italic tracking-wider text-slate-700 uppercase">

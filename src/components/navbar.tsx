@@ -30,12 +30,10 @@ const Navbar = () => {
 
   const handleLoginClick = () => navigate('/login');
 
-  // ─── Logout: hapus token di backend lalu bersihkan localStorage ──
   const handleLogout = async () => {
     try {
       await authApi.logout();
     } catch {
-      // lanjutkan meskipun request gagal
     } finally {
       clearSession();
       navigate('/');

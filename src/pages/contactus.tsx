@@ -47,7 +47,7 @@ const ContactUs = () => {
 
   return (
     <div className="bg-[#fcfdfd] min-h-screen w-full flex flex-col items-center pt-20 pb-32">
-      {/* Header */}
+
       <h1 className="text-[40px] md:text-[56px] font-bold text-[#7DCEF4] mb-4 tracking-wide font-sans text-center px-4">
         Contact Us
       </h1>
@@ -55,9 +55,9 @@ const ContactUs = () => {
         Questions, suggestions, or feedback? Don't hesitate to contact our support team. We're here to help you.
       </p>
 
-      {/* Two Column Layout */}
+
       <div className="max-w-[1100px] w-full mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12">
-        {/* Contact Info (Left) */}
+
         <div className="lg:col-span-5 space-y-8 flex flex-col justify-center">
           <div className="bg-gradient-to-tr from-[#7DCEF4] to-[#BBE4FB] p-8 rounded-3xl text-white shadow-lg space-y-6">
             <h3 className="text-2xl font-bold mb-2">Contact Information</h3>
@@ -106,7 +106,7 @@ const ContactUs = () => {
           </div>
         </div>
 
-        {/* Contact Form (Right) */}
+
         <div className="lg:col-span-7 bg-white p-8 md:p-10 rounded-3xl border border-gray-100 shadow-sm">
           {submitSuccess ? (
             <div className="text-center py-12 space-y-4">

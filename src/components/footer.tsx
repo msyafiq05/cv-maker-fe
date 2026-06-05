@@ -12,7 +12,6 @@ const Footer = () => {
   return (
     <footer className="bg-gradient-to-r from-[#55B3EB] to-[#BBE4FB] pt-16 pb-8 mt-auto">
       <div className="max-w-7xl mx-auto px-8 flex flex-col lg:flex-row justify-between items-start mb-8 gap-10 lg:gap-0">
-        {/* Logo Section */}
         <div className="w-full lg:w-1/4">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 flex items-center justify-center">
@@ -27,7 +26,6 @@ const Footer = () => {
           </p>
         </div>
 
-        {/* Links Section */}
         <div className="w-full lg:w-1/2 flex flex-wrap lg:flex-nowrap justify-between gap-8 text-gray-900">
           <div>
             <h4 className="font-bold mb-4 text-sm">Product</h4>
@@ -59,7 +57,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Social Icons Section */}
         <div className="w-full lg:w-1/4 flex lg:justify-end gap-5 mt-4 lg:mt-0 items-center">
           <a href="https://www.instagram.com/cvmaker" target="_blank" rel="noopener noreferrer" className="w-6 h-6 flex items-center justify-center hover:scale-105 transition duration-200">
             <img src={instagramLogo} alt="Instagram" className="w-6 h-6 object-contain" />

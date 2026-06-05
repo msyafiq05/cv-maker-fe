@@ -40,7 +40,6 @@ const AdminDashboard = () => {
   const [searchContactQuery, setSearchContactQuery] = useState('');
   const [expandedMessageId, setExpandedMessageId] = useState<number | null>(null);
 
-  // States for Add User Modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [newUser, setNewUser] = useState({
@@ -74,7 +73,6 @@ const AdminDashboard = () => {
   };
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchDashboardData();
     fetchContactMessages();
   }, []);
@@ -140,7 +138,6 @@ const AdminDashboard = () => {
       if (response.message) {
         setIsModalOpen(false);
 
-        // Tambahkan langsung ke tabel untuk UI update yang instan
         if (response.user) {
           const addedUser: User = {
             id: response.user.id,
@@ -160,7 +157,6 @@ const AdminDashboard = () => {
 
         setNewUser({ nama: '', username: '', email: '', password: '', password_confirmation: '' });
 
-        // Panggil fetch di background untuk memastikan konsistensi data
         fetchDashboardData();
         adminApi.getUsers(searchQuery).then(res => {
           if (res.status === 'success') setUsers(res.data);
@@ -186,13 +182,10 @@ const AdminDashboard = () => {
   return (
     <div className="flex flex-col min-h-screen bg-white font-sans antialiased">
 
-      {/* MAIN CONTENT AREA */}
       <main className="flex-1 max-w-[1200px] w-full mx-auto px-8 py-16">
 
-        {/* HEADER & CARDS SECTION - FLEX LAYOUT */}
         <div className="flex flex-col lg:flex-row justify-between items-center lg:items-start mb-16 gap-10">
 
-          {/* KIRI: HEADING UTAMA DUA WARNA */}
           <div className="mt-2 lg:mt-6 flex-shrink-0 text-center lg:text-left">
             <h1 className="text-[54px] font-bold leading-tight tracking-tight">
               <span className="text-[#5DADE2]">Hello Admin !</span>
@@ -204,10 +197,7 @@ const AdminDashboard = () => {
             </p>
           </div>
 
-          {/* KANAN: SECTION 3 CARD OVERVIEW */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 w-full max-w-[600px]">
-
-            {/* Card 1: Total Registered Users */}
             <div className="bg-[#eaf5ff] border border-[#4a85bb]/40 rounded-xl pt-6 pb-5 px-4 flex flex-col items-center justify-between min-h-[220px] w-full shadow-sm">
               <div className="text-[#334155]">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.2}>
@@ -223,7 +213,6 @@ const AdminDashboard = () => {
               <p className="text-[10px] font-bold text-[#475569] tracking-wide">Since Last Week ({stats.new_users_since_last_week})</p>
             </div>
 
-            {/* Card 2: Active CV Templates */}
             <div className="bg-[#eaf5ff] border border-[#4a85bb]/40 rounded-xl pt-6 pb-5 px-4 flex flex-col items-center justify-between min-h-[220px] w-full shadow-sm">
               <div className="text-[#334155]">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.2}>
@@ -239,7 +228,6 @@ const AdminDashboard = () => {
               <div className="h-4"></div>
             </div>
 
-            {/* Card 3: Total CV Downloads */}
             <div className="bg-[#eaf5ff] border border-[#4a85bb]/40 rounded-xl pt-6 pb-5 px-4 flex flex-col items-center justify-between min-h-[220px] w-full shadow-sm">
               <div className="text-[#334155]">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.2}>
@@ -258,7 +246,6 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* SECTION: USER MANAGEMENT TABLE */}
         <section className="mt-16">
           <div className="flex items-end justify-between mb-8">
             <h2 className="text-[38px] font-bold text-[#4682B4] tracking-tight leading-none">
@@ -266,7 +253,6 @@ const AdminDashboard = () => {
             </h2>
 
             <div className="flex items-center gap-4">
-              {/* Tombol Tambah User */}
               <button
                 onClick={() => setIsModalOpen(true)}
                 className="bg-[#4682B4] hover:bg-[#3A6D99] text-white px-4 py-1.5 rounded-md text-sm font-semibold transition-colors flex items-center gap-2 shadow-sm"
@@ -277,7 +263,6 @@ const AdminDashboard = () => {
                 Add User
               </button>
 
-              {/* Input Search Tipis Minimalis */}
               <div className="relative">
                 <span className="absolute inset-y-0 left-3 flex items-center text-gray-400 text-sm">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -295,7 +280,6 @@ const AdminDashboard = () => {
             </div>
           </div>
 
-          {/* Render Tabel Data User */}
           <div className="overflow-x-auto w-full">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -346,8 +330,6 @@ const AdminDashboard = () => {
                     <td className="py-5 px-2 text-center text-gray-800 font-medium">{user.cv_count}</td>
                     <td className="py-5 px-2 text-gray-500 font-light">{user.last_access || '-'}</td>
                     <td className="py-5 px-2 text-center">
-
-                      {/* FUNGSIONAL: Menghubungkan klik tombol ke fungsi handleDeleteUser */}
                       <button
                         onClick={() => handleDeleteUser(user.id)}
                         className="text-red-500 hover:text-red-700 transition-colors p-1"
@@ -357,7 +339,6 @@ const AdminDashboard = () => {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
                       </button>
-
                     </td>
                   </tr>
                 ))}
@@ -366,7 +347,6 @@ const AdminDashboard = () => {
           </div>
         </section>
 
-        {/* SECTION: CONTACT MESSAGES */}
         <section className="mt-20">
           <div className="flex items-end justify-between mb-8">
             <h2 className="text-[38px] font-bold text-[#4682B4] tracking-tight leading-none">
@@ -376,7 +356,6 @@ const AdminDashboard = () => {
               <span className="text-sm text-gray-500 font-medium">
                 {filteredContactMessages.length} messages received
               </span>
-              {/* Input Search untuk Contact Messages */}
               <div className="relative">
                 <span className="absolute inset-y-0 left-3 flex items-center text-gray-400 text-sm">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -496,8 +475,6 @@ const AdminDashboard = () => {
         </section>
 
       </main>
-
-      {/* MODAL TAMBAH USER */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm">
           <div className="bg-white rounded-xl shadow-xl w-full max-w-md p-7 relative animate-fade-in-up">

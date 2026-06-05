@@ -7,7 +7,6 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // If user was redirected here from a protected page, capture the origin
   const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/';
 
   const [email, setEmail] = useState('');

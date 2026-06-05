@@ -50,7 +50,6 @@ const Project = () => {
     }
   };
 
-  // ─── Hapus CV project ────────────────────────────────────────
   const handleDelete = async (e: React.MouseEvent, projectId: number) => {
     e.stopPropagation();
     if (!confirm('Are you sure you want to delete this CV?')) return;

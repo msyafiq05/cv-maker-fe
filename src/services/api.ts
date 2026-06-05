@@ -2,12 +2,12 @@
 
 const BASE_URL = 'http://127.0.0.1:8000/api';
 
-// ─── Helper: ambil token dari localStorage ───────────────────
+
 function getToken(): string | null {
   return localStorage.getItem('token');
 }
 
-// ─── Helper: buat header dengan / tanpa Authorization ────────
+
 function headers(isAuth = true): HeadersInit {
   const h: Record<string, string> = {
     'Content-Type': 'application/json',
@@ -20,17 +20,15 @@ function headers(isAuth = true): HeadersInit {
   return h;
 }
 
-// ─── Helper: handle response ──────────────────────────────────
+
 async function handleResponse(res: Response) {
   const json = await res.json();
   if (!res.ok) throw json; // lempar error supaya bisa di-catch
   return json;
 }
 
-// ================================================================
-// AUTH
-// ================================================================
 
+// AUTH
 export const authApi = {
   register: (data: {
     nama: string;
@@ -82,10 +80,8 @@ export const authApi = {
     }).then(handleResponse),
 };
 
-// ================================================================
-// PROFILE
-// ================================================================
 
+// PROFILE
 export const profileApi = {
   get: () =>
     fetch(`${BASE_URL}/profile`, { headers: headers() }).then(handleResponse),
@@ -104,10 +100,8 @@ export const profileApi = {
     }).then(handleResponse),
 };
 
-// ================================================================
-// TEMPLATES
-// ================================================================
 
+// TEMPLATES
 export const templateApi = {
   getAll: () =>
     fetch(`${BASE_URL}/templates`, { headers: headers(false) }).then(handleResponse),
@@ -116,10 +110,7 @@ export const templateApi = {
     fetch(`${BASE_URL}/templates/${id}`, { headers: headers(false) }).then(handleResponse),
 };
 
-// ================================================================
 // CV PROJECTS
-// ================================================================
-
 export const projectApi = {
   getAll: () =>
     fetch(`${BASE_URL}/cv-projects`, { headers: headers() }).then(handleResponse),
@@ -154,10 +145,7 @@ export const projectApi = {
     }).then(handleResponse),
 };
 
-// ================================================================
 // PERSONAL DETAIL
-// ================================================================
-
 export const personalDetailApi = {
   get: (projectId: number) =>
     fetch(`${BASE_URL}/cv-projects/${projectId}/personal-detail`, {
@@ -172,10 +160,7 @@ export const personalDetailApi = {
     }).then(handleResponse),
 };
 
-// ================================================================
 // EMPLOYMENT HISTORY
-// ================================================================
-
 export const employmentApi = {
   getAll: (projectId: number) =>
     fetch(`${BASE_URL}/cv-projects/${projectId}/employments`, {
@@ -203,10 +188,7 @@ export const employmentApi = {
     }).then(handleResponse),
 };
 
-// ================================================================
 // EDUCATION
-// ================================================================
-
 export const educationApi = {
   getAll: (projectId: number) =>
     fetch(`${BASE_URL}/cv-projects/${projectId}/educations`, {
@@ -234,10 +216,7 @@ export const educationApi = {
     }).then(handleResponse),
 };
 
-// ================================================================
 // SKILLS
-// ================================================================
-
 export const skillApi = {
   getAll: (projectId: number) =>
     fetch(`${BASE_URL}/cv-projects/${projectId}/skills`, {
@@ -265,10 +244,7 @@ export const skillApi = {
     }).then(handleResponse),
 };
 
-// ================================================================
 // ORGANIZATIONS
-// ================================================================
-
 export const organizationApi = {
   getAll: (projectId: number) =>
     fetch(`${BASE_URL}/cv-projects/${projectId}/organizations`, {
@@ -296,10 +272,7 @@ export const organizationApi = {
     }).then(handleResponse),
 };
 
-// ================================================================
 // ADMIN
-// ================================================================
-
 export const adminApi = {
   getDashboardStats: () =>
     fetch(`${BASE_URL}/admin/dashboard-stats`, { headers: headers() }).then(handleResponse),
@@ -325,10 +298,8 @@ export const adminApi = {
     }).then(handleResponse),
 };
 
-// ================================================================
-// CONTACT MESSAGES
-// ================================================================
 
+// CONTACT MESSAGES
 export const contactApi = {
   send: (data: {
     name: string;
@@ -343,7 +314,7 @@ export const contactApi = {
     }).then(handleResponse),
 };
 
-// ─── Utility: simpan & hapus sesi login ─────────────────────
+// simpan & hapus sesi login
 export const saveSession = (token: string, user: object) => {
   localStorage.setItem('token', token);
   localStorage.setItem('user', JSON.stringify(user));
