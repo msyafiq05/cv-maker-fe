@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useCvEdit } from '../context/CvEditContext';
 import html2canvas from 'html2canvas-pro';
-// @ts-ignore
 import html2pdf from 'html2pdf.js';
 import { projectApi } from '../services/api';
 
